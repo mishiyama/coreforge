@@ -56,9 +56,7 @@ class Product(models.Model):
         max_length=200
     )
 
-    slug = models.SlugField(
-        unique=True
-    )
+    slug = models.SlugField(max_length=200, unique=True)
 
     description = models.TextField()
 
