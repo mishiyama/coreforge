@@ -25,8 +25,7 @@ SECRET_KEY = 'django-insecure-5jaece4o=f%^+5u6-061(pdt6p*665*0gcdp0e#wc-13_1orn!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1","localhost",".trycloudflare.com",]
-
+ALLOWED_HOSTS = ["127.0.0.1","localhost",".trycloudflare.com",".vercel.app",]
 
 # Application definition
 
@@ -94,7 +93,8 @@ TEMPLATES = [
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://fred-joy-empire-roster.trycloudflare.com",
+    "https://*.vercel.app",
+    "https://*.trycloudflare.com",
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
