@@ -1,0 +1,365 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/product_list.css' %}">
+{% endblock %}
+
+{% block title %}
+Products | NepCart
+{% endblock %}
+
+
+{% block content %}
+
+<div class="products-page">
+
+
+    <!-- ==========================================
+         PAGE HEADER
+    =========================================== -->
+
+    <div class="products-header">
+
+        <div>
+
+            <h1>
+                All Products
+            </h1>
+
+            <p>
+                Find the right products for you.
+            </p>
+
+    </div>
+
+
+    <!-- ==========================================
+         FILTERS
+    =========================================== -->
+
+    <section class="product-filters">
+
+        <form
+            method="GET"
+            class="filter-form"
+        >
+
+
+            <!-- Search -->
+
+            <div class="filter-group filter-search">
+
+                <label for="search">
+                    Search
+                </label>
+
+                <input
+                    type="text"
+                    id="search"
+                    name="search"
+                    value="{{ search }}"
+                    placeholder="Search products..."
+                >
+
+            </div>
+
+
+            <!-- Category -->
+
+            <div class="filter-group">
+
+                <label for="category">
+                    Category
+                </label>
+
+                <select
+                    id="category"
+                    name="category"
+                >
+
+                    <option value="">
+                        All Categories
+                    </option>
+
+                    {% for category in categories %}
+
+                        <option
+                            value="{{ category.category_id }}"
+                            {% if selected_category == category.category_id|stringformat:"s" %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ category.category__name }}
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+            <!-- Brand -->
+
+            <div class="filter-group">
+
+                <label for="brand">
+                    Brand
+                </label>
+
+                <select
+                    id="brand"
+                    name="brand"
+                >
+
+                    <option value="">
+                        All Brands
+                    </option>
+
+                    {% for brand in brands %}
+
+                        <option
+                            value="{{ brand }}"
+                            {% if selected_brand == brand %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ brand }}
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+            <!-- Minimum Price -->
+
+            <div class="filter-group">
+
+                <label for="min_price">
+                    Min Price
+                </label>
+
+                <input
+                    type="number"
+                    id="min_price"
+                    name="min_price"
+                    value="{{ min_price }}"
+                    placeholder="Rs. 0"
+                    min="0"
+                >
+
+            </div>
+
+
+            <!-- Maximum Price -->
+
+            <div class="filter-group">
+
+                <label for="max_price">
+                    Max Price
+                </label>
+
+                <input
+                    type="number"
+                    id="max_price"
+                    name="max_price"
+                    value="{{ max_price }}"
+                    placeholder="Rs. 100000"
+                    min="0"
+                >
+
+            </div>
+
+
+            <!-- Sort -->
+
+            <div class="filter-group">
+
+                <label for="sort">
+                    Sort By
+                </label>
+
+                <select
+                    id="sort"
+                    name="sort"
+                >
+
+                    <option value="">
+                        Default
+                    </option>
+
+                    <option
+                        value="newest"
+                        {% if selected_sort == 'newest' %}
+                            selected
+                        {% endif %}
+                    >
+                        Newest
+                    </option>
+
+                    <option
+                        value="name"
+                        {% if selected_sort == 'name' %}
+                            selected
+                        {% endif %}
+                    >
+                        Name
+                    </option>
+
+                    <option
+                        value="price_low"
+                        {% if selected_sort == 'price_low' %}
+                            selected
+                        {% endif %}
+                    >
+                        Price: Low to High
+                    </option>
+
+                    <option
+                        value="price_high"
+                        {% if selected_sort == 'price_high' %}
+                            selected
+                        {% endif %}
+                    >
+                        Price: High to Low
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- Buttons -->
+
+            <div class="filter-actions">
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+                    Apply Filters
+                </button>
+
+                <a
+                    href="{% url 'products:list' %}"
+                    class="btn btn-secondary"
+                >
+                    Clear
+                </a>
+
+            </div>
+
+        </form>
+
+    </section>
+
+
+    <!-- ==========================================
+         RESULTS
+    =========================================== -->
+
+    <div class="products-result-header">
+
+        <p>
+            Showing
+            <strong>{{ products|length }}</strong>
+            product{{ products|length|pluralize }}
+        </p>
+
+    </div>
+
+
+    <!-- ==========================================
+         PRODUCT GRID
+    =========================================== -->
+
+    <div class="product-grid">
+
+        {% for product in products %}
+
+            <article class="product-card">
+
+
+                <!-- Product Image -->
+
+                <div class="product-image">
+
+                    {% if product.image %}
+
+                        <img
+                            src="{{ product.image.url }}"
+                            alt="{{ product.name }}"
+                        >
+
+                    {% else %}
+
+                        <div class="no-image">
+                            No Image
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Product Information -->
+
+                <div class="product-info">
+
+                    <h3>
+                        {{ product.name }}
+                    </h3>
+
+                    <p class="product-brand">
+                        {{ product.brand }}
+                    </p>
+
+                    <p class="product-price">
+                        Rs. {{ product.final_price }}
+                    </p>
+
+
+                    <a
+                        href="{{ product.get_absolute_url }}"
+                        class="btn btn-primary product-button"
+                    >
+                        View Product
+                    </a>
+
+                </div>
+
+            </article>
+
+
+        {% empty %}
+
+            <div class="no-products">
+
+                <h2>
+                    No products found
+                </h2>
+
+                <p>
+                    Try changing your search or filters.
+                </p>
+
+                <a
+                    href="{% url 'products:list' %}"
+                    class="btn btn-primary"
+                >
+                    View All Products
+                </a>
+
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}

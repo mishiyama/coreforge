@@ -1,0 +1,283 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Payment | NepCart
+{% endblock %}
+
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/payment.css' %}"
+>
+
+{% endblock %}
+
+
+{% block content %}
+
+{% if esewa_payment %}
+
+<div class="payment-page esewa-redirect-page">
+    <section class="payment-card">
+        <div class="payment-card-header">
+            <span class="payment-step">SECURE REDIRECT</span>
+            <h1>Redirecting to eSewa</h1>
+        </div>
+
+        <form
+            id="esewa-payment-form"
+            method="POST"
+            action="{{ esewa_payment_url }}"
+        >
+            <input type="hidden" name="amount" value="{{ esewa_fields.amount }}">
+            <input type="hidden" name="tax_amount" value="{{ esewa_fields.tax_amount }}">
+            <input type="hidden" name="total_amount" value="{{ esewa_fields.total_amount }}">
+            <input type="hidden" name="transaction_uuid" value="{{ esewa_fields.transaction_uuid }}">
+            <input type="hidden" name="product_code" value="{{ esewa_fields.product_code }}">
+            <input type="hidden" name="product_service_charge" value="{{ esewa_fields.product_service_charge }}">
+            <input type="hidden" name="product_delivery_charge" value="{{ esewa_fields.product_delivery_charge }}">
+            <input type="hidden" name="success_url" value="{{ esewa_fields.success_url }}">
+            <input type="hidden" name="failure_url" value="{{ esewa_fields.failure_url }}">
+            <input type="hidden" name="signed_field_names" value="total_amount,transaction_uuid,product_code">
+            <input type="hidden" name="signature" value="{{ esewa_fields.signature }}">
+            <noscript>
+                <button type="submit" class="payment-submit">
+                    Continue to eSewa
+                </button>
+            </noscript>
+        </form>
+    </section>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('esewa-payment-form').submit();
+    });
+</script>
+
+{% else %}
+
+<div class="payment-page">
+
+    <!-- Header -->
+
+    <div class="payment-header">
+
+        <p class="payment-eyebrow">
+            CHECKOUT
+        </p>
+
+        <h1>
+            Complete Your Payment
+        </h1>
+
+        <p>
+            Choose your preferred payment method to complete your order.
+        </p>
+
+    </div>
+
+
+    <div class="payment-layout">
+
+
+        <!-- Payment Form -->
+
+        <section class="payment-card">
+
+            <div class="payment-card-header">
+
+                <div>
+
+                    <span class="payment-step">
+                        STEP 2 OF 2
+                    </span>
+
+                    <h2>
+                        Payment Method
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <form
+                method="POST"
+                action="{% url 'payments:process' order.order_number %}"
+                class="payment-form"
+            >
+
+                {% csrf_token %}
+
+
+                <!-- COD -->
+
+                <label class="payment-option">
+
+                    <input
+                        type="radio"
+                        name="payment_method"
+                        value="cod"
+                        checked
+                    >
+
+                    <div class="payment-option-content">
+
+                        <div class="payment-option-icon">
+                            💵
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Cash on Delivery
+                            </strong>
+
+                            <span>
+                                Pay when your order arrives.
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <span class="payment-radio"></span>
+
+                </label>
+
+
+                <!-- eSewa -->
+
+                <label class="payment-option">
+
+                    <input
+                        type="radio"
+                        name="payment_method"
+                        value="esewa"
+                    >
+
+                    <div class="payment-option-content">
+
+                        <div class="payment-option-icon">
+                            💚
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                eSewa
+                            </strong>
+
+                            <span>
+                                Pay securely using your eSewa account.
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <span class="payment-radio"></span>
+
+                </label>
+
+
+                <button
+                    type="submit"
+                    class="payment-submit"
+                >
+                    Confirm Payment
+                </button>
+
+            </form>
+
+        </section>
+
+
+        <!-- Order Summary -->
+
+        <aside class="payment-summary">
+
+            <div class="payment-summary-header">
+
+                <span>
+                    ORDER SUMMARY
+                </span>
+
+                <h2>
+                    #{{ order.order_number }}
+                </h2>
+
+            </div>
+
+
+            <div class="payment-summary-body">
+
+                <div class="payment-summary-row">
+
+                    <span>
+                        Subtotal
+                    </span>
+
+                    <strong>
+                        Rs. {{ order.subtotal }}
+                    </strong>
+
+                </div>
+
+
+                <div class="payment-summary-row">
+
+                    <span>
+                        Delivery
+                    </span>
+
+                    <strong>
+                        Rs. {{ order.delivery_charge }}
+                    </strong>
+
+                </div>
+
+
+                <div class="payment-summary-divider"></div>
+
+
+                <div class="payment-total">
+
+                    <span>
+                        Total
+                    </span>
+
+                    <strong>
+                        Rs. {{ order.total }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="payment-security">
+
+                <span>
+                    🔒
+                </span>
+
+                <p>
+                    Your payment information is handled securely.
+                </p>
+
+            </div>
+
+        </aside>
+
+    </div>
+
+</div>
+
+{% endif %}
+
+{% endblock %}

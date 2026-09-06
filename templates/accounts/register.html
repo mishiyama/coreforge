@@ -1,0 +1,205 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Create Account | NepCart
+{% endblock %}
+
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/register.css' %}"
+>
+
+{% endblock %}
+
+
+{% block content %}
+
+<section class="auth-page">
+
+    <div class="auth-card">
+
+        <!-- Header -->
+
+        <div class="auth-header">
+
+            <div class="auth-icon">
+                🛒
+            </div>
+
+            <h1>
+                Create Your Account
+            </h1>
+
+            <p>
+                Join NepCart and start shopping today.
+            </p>
+
+        </div>
+
+
+        <!-- Registration Form -->
+
+        <form
+            method="POST"
+            class="auth-form"
+        >
+
+            {% csrf_token %}
+
+
+            <!-- Form-wide errors -->
+
+            {% if form.non_field_errors %}
+
+                <div class="form-error">
+
+                    {{ form.non_field_errors }}
+
+                </div>
+
+            {% endif %}
+
+
+            <!-- Username -->
+
+            <div class="form-group">
+
+                <label
+                    for="{{ form.username.id_for_label }}"
+                >
+                    Username
+                </label>
+
+                {{ form.username }}
+
+                {% if form.username.errors %}
+
+                    <div class="field-error">
+
+                        {{ form.username.errors }}
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- Email -->
+
+            {% if form.email %}
+
+                <div class="form-group">
+
+                    <label
+                        for="{{ form.email.id_for_label }}"
+                    >
+                        Email Address
+                    </label>
+
+                    {{ form.email }}
+
+                    {% if form.email.errors %}
+
+                        <div class="field-error">
+
+                            {{ form.email.errors }}
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            {% endif %}
+
+
+            <!-- Password -->
+
+            <div class="form-group">
+
+                <label
+                    for="{{ form.password1.id_for_label }}"
+                >
+                    Password
+                </label>
+
+                {{ form.password1 }}
+
+                {% if form.password1.errors %}
+
+                    <div class="field-error">
+
+                        {{ form.password1.errors }}
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- Confirm Password -->
+
+            <div class="form-group">
+
+                <label
+                    for="{{ form.password2.id_for_label }}"
+                >
+                    Confirm Password
+                </label>
+
+                {{ form.password2 }}
+
+                {% if form.password2.errors %}
+
+                    <div class="field-error">
+
+                        {{ form.password2.errors }}
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- Submit -->
+
+            <button
+                type="submit"
+                class="auth-submit"
+            >
+                Create Account
+            </button>
+
+        </form>
+
+
+        <!-- Login -->
+
+        <div class="auth-footer">
+
+            <p>
+
+                Already have an account?
+
+                <a
+                    href="{% url 'accounts:login' %}"
+                >
+                    Login
+                </a>
+
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

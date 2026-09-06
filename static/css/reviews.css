@@ -1,0 +1,6 @@
+.reviews-page { padding: 40px 0 70px; }
+.reviews-header { margin-bottom: 28px; }
+.review-list { display: grid; gap: 16px; }
+.review-card { padding: 22px; background: #fff; border: 1px solid var(--color-border); border-radius: 12px; }
+.review-card h2 { margin: 0 0 8px; font-size: 1.1rem; }
+.review-card p { color: var(--color-text-secondary); }

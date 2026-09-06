@@ -1,0 +1,171 @@
+{% load static %}
+
+<header class="site-header">
+    
+<nav class="navbar" aria-label="Main navigation">
+
+    <div class="nav-container">
+
+        <!-- Logo -->
+        <a
+            href="{% url 'home' %}"
+            class="logo"
+            aria-label="NepCart Home"
+        >
+            NepCart
+        </a>
+
+
+        <!-- Mobile menu toggle -->
+        <input
+            type="checkbox"
+            id="nav-toggle"
+            class="nav-toggle"
+            aria-label="Toggle navigation menu"
+        >
+
+        <label
+            for="nav-toggle"
+            class="nav-toggle-label"
+            aria-hidden="true"
+        >
+            <span></span>
+            <span></span>
+            <span></span>
+        </label>
+
+
+        <!-- Navigation -->
+        <div class="nav-links">
+
+            <!-- Home -->
+            <a
+                href="{% url 'home' %}"
+                class="nav-link"
+            >
+                Home
+            </a>
+
+
+            <!-- Shop -->
+            <a
+                href="{% url 'products:list' %}"
+                class="nav-link"
+            >
+                Shop
+            </a>
+
+            {% if user.is_authenticated %}
+
+                <!-- Cart -->
+                <a
+                    href="{% url 'cart:detail' %}"
+                    class="nav-link cart-link"
+                >
+
+                    <span
+                        class="cart-icon"
+                        aria-hidden="true"
+                    >
+                        🛒
+                    </span>
+
+                    <span>
+                        Cart
+                    </span>
+
+                    {% if cart_count > 0 %}
+
+                        <span
+                            class="cart-count"
+                            aria-label="{{ cart_count }} cart items"
+                        >
+                            {{ cart_count }}
+                        </span>
+
+                    {% endif %}
+
+                </a>
+
+
+                <!-- My Orders -->
+                <a
+                    href="{% url 'orders:list' %}"
+                    class="nav-link"
+                >
+                    My Orders
+                </a>
+
+                <a
+                    href="{% url 'wishlist:detail' %}"
+                    class="nav-link"
+                >
+                    Wishlist
+                </a>
+
+                <a
+                    href="{% url 'dashboard:home' %}"
+                    class="nav-link"
+                >
+                    Dashboard
+                </a>
+
+
+                <!-- Profile -->
+                <a
+                    href="{% url 'accounts:profile' %}"
+                    class="profile-nav-link"
+                >
+
+                    <span class="profile-nav-avatar">
+
+                        {% if user.profile.profile_image %}
+
+                            <img
+                                src="{{ user.profile.profile_image.url }}"
+                                alt="{{ user.username }}"
+                            >
+
+                        {% else %}
+
+                            {{ user.username|first|upper }}
+
+                        {% endif %}
+
+                    </span>
+
+                    <span class="profile-nav-name">
+                        Profile
+                    </span>
+
+                </a>
+
+
+            {% else %}
+
+                <!-- Login -->
+                <a
+                    href="{% url 'accounts:login' %}"
+                    class="nav-link nav-login"
+                >
+                    Login
+                </a>
+
+
+                <!-- Register -->
+                <a
+                    href="{% url 'accounts:register' %}"
+                    class="nav-register"
+                >
+                    Register
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</nav>
+
+</header>

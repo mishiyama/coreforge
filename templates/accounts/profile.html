@@ -1,0 +1,273 @@
+{% extends 'base.html' %} 
+{% load static %} 
+{% block title %} 
+My Profile |NepCart 
+{% endblock %} 
+{% block extra_css %}
+
+<link rel="stylesheet" href="{% static 'css/profile.css' %}" />
+
+{% endblock %} {% block content %}
+
+<section class="profile-page">
+  <div class="profile-container">
+    <!-- ==========================================
+             PAGE HEADER
+        =========================================== -->
+
+    <div class="profile-page-header">
+      <div>
+        <p class="profile-eyebrow">ACCOUNT</p>
+
+        <h1>My Profile</h1>
+
+        <p>Manage your personal information and account details.</p>
+      </div>
+    </div>
+
+    <div class="profile-layout">
+      <!-- ==========================================
+                 PROFILE SIDEBAR
+            =========================================== -->
+
+      <aside class="profile-sidebar">
+        <!-- Avatar -->
+
+        <div class="profile-avatar">
+          {% if profile.profile_image %}
+
+          <img
+            src="{{ profile.profile_image.url }}"
+            alt="{{ user.username }}"
+          />
+
+          {% else %}
+
+          <span> {{ user.username|first|upper }} </span>
+
+          {% endif %}
+        </div>
+
+        <!-- User Name -->
+
+        <h2>
+          {% if user.get_full_name %} {{ user.get_full_name }} {% else %} {{
+          user.username }} {% endif %}
+        </h2>
+
+        <!-- Username -->
+
+        <p class="profile-username">@{{ user.username }}</p>
+
+        <!-- Sidebar Navigation -->
+
+        <div class="profile-sidebar-links">
+          <a
+            href="{% url 'accounts:profile' %}"
+            class="profile-sidebar-link active"
+          >
+            <span>👤</span>
+            Profile
+          </a>
+
+          <a href="{% url 'orders:list' %}" class="profile-sidebar-link">
+            <span>📦</span>
+            My Orders
+          </a>
+
+          <a href="{% url 'cart:detail' %}" class="profile-sidebar-link">
+            <span>🛒</span>
+            My Cart
+          </a>
+
+          <form
+            method="POST"
+            action="{% url 'accounts:logout' %}"
+            class="profile-logout-form"
+          >
+            {% csrf_token %}
+
+            <button
+              type="submit"
+              class="profile-sidebar-link profile-logout-button"
+            >
+              <span>🚪</span>
+              Logout
+            </button>
+          </form>
+        </div>
+      </aside>
+
+      <!-- ==========================================
+                 MAIN PROFILE CONTENT
+            =========================================== -->
+
+      <div class="profile-main">
+        <!-- Account Information -->
+
+        <div class="profile-card">
+          <!-- Card Header -->
+
+          <div class="profile-card-header">
+            <div>
+              <h2>Account Information</h2>
+
+              <p>Update your personal information below.</p>
+            </div>
+          </div>
+
+          <!-- Profile Form -->
+
+          <form
+            method="POST"
+            enctype="multipart/form-data"
+            class="profile-form"
+          >
+            {% csrf_token %}
+
+            <!-- Form Errors -->
+
+            {% if form.non_field_errors %}
+
+            <div class="profile-form-error">{{ form.non_field_errors }}</div>
+
+            {% endif %}
+
+            <!-- ==================================
+                             PROFILE IMAGE
+                        =================================== -->
+
+            <div class="profile-image-section">
+              <div class="profile-current-image">
+                {% if profile.profile_image %}
+
+                <img
+                  src="{{ profile.profile_image.url }}"
+                  alt="{{ user.username }}"
+                />
+
+                {% else %}
+
+                <span> {{ user.username|first|upper }} </span>
+
+                {% endif %}
+              </div>
+
+              <div>
+                <label for="{{ form.profile_image.id_for_label }}">
+                  Profile Photo
+                </label>
+
+                {{ form.profile_image }} {% if form.profile_image.errors %}
+
+                <div class="profile-field-error">
+                  {{ form.profile_image.errors }}
+                </div>
+
+                {% endif %}
+
+                <small> Upload a JPG, PNG, or WebP image. </small>
+              </div>
+            </div>
+
+            <!-- ==================================
+                             USERNAME
+                        =================================== -->
+
+            <div class="profile-field">
+              <label> Username </label>
+
+              <input type="text" value="{{ user.username }}" readonly />
+
+              <small> Your username cannot be changed here. </small>
+            </div>
+
+            <!-- ==================================
+                             FIRST + LAST NAME
+                        =================================== -->
+
+            <div class="profile-form-row">
+              <div class="profile-field">
+                <label for="{{ form.first_name.id_for_label }}">
+                  First Name
+                </label>
+
+                {{ form.first_name }} {% if form.first_name.errors %}
+
+                <div class="profile-field-error">
+                  {{ form.first_name.errors }}
+                </div>
+
+                {% endif %}
+              </div>
+
+              <div class="profile-field">
+                <label for="{{ form.last_name.id_for_label }}">
+                  Last Name
+                </label>
+
+                {{ form.last_name }} {% if form.last_name.errors %}
+
+                <div class="profile-field-error">
+                  {{ form.last_name.errors }}
+                </div>
+
+                {% endif %}
+              </div>
+            </div>
+
+            <!-- ==================================
+                             EMAIL
+                        =================================== -->
+
+            <div class="profile-field">
+              <label for="{{ form.email.id_for_label }}"> Email Address </label>
+
+              {{ form.email }} {% if form.email.errors %}
+
+              <div class="profile-field-error">{{ form.email.errors }}</div>
+
+              {% endif %}
+            </div>
+
+            <!-- ==================================
+                             PHONE
+                        =================================== -->
+
+            <div class="profile-field">
+              <label for="{{ form.phone.id_for_label }}"> Phone Number </label>
+
+              {{ form.phone }} {% if form.phone.errors %}
+
+              <div class="profile-field-error">{{ form.phone.errors }}</div>
+
+              {% endif %}
+            </div>
+
+            <!-- ==================================
+                             ACCOUNT META
+                        =================================== -->
+
+            <div class="profile-account-meta">
+              <span> Member since </span>
+
+              <strong> {{ user.date_joined|date:"F Y" }} </strong>
+            </div>
+
+            <!-- ==================================
+                             SAVE BUTTON
+                        =================================== -->
+
+            <div class="profile-form-actions">
+              <button type="submit" class="profile-save-button">
+                Save Changes
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

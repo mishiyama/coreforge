@@ -1,0 +1,295 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/product_detail.css' %}">
+{% endblock %}
+
+{% block title %}
+{{ product.name }} | NepCart
+{% endblock %}
+
+{% block content %}
+
+<section class="product-detail-section">
+
+    <div class="product-detail-container">
+
+        <!-- ==========================================
+             BACK NAVIGATION
+        =========================================== -->
+
+        <div class="product-detail-back">
+
+            <a href="{% url 'products:list' %}">
+                <span aria-hidden="true">←</span>
+                Back to Products
+            </a>
+
+        </div>
+
+
+        <!-- ==========================================
+             PRODUCT DETAIL CARD
+        =========================================== -->
+
+        <div class="product-detail-card">
+
+
+            <!-- ======================================
+                 PRODUCT IMAGE
+            ======================================= -->
+
+            <div class="product-detail-media">
+
+                <div class="product-detail-image">
+
+                    {% if product.image %}
+
+                        <img
+                            src="{{ product.image.url }}"
+                            alt="{{ product.name }}"
+                        >
+
+                    {% else %}
+
+                        <div class="product-detail-no-image">
+                            No Image Available
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- ======================================
+                 PRODUCT INFORMATION
+            ======================================= -->
+
+            <div class="product-detail-info">
+
+
+                <!-- Category -->
+
+                {% if product.category %}
+
+                    <a
+                        href="{{ product.category.get_absolute_url }}"
+                        class="product-detail-category"
+                    >
+                        {{ product.category.name }}
+                    </a>
+
+                {% endif %}
+
+
+                <!-- Product Name -->
+
+                <h1 class="product-detail-title">
+                    {{ product.name }}
+                </h1>
+
+
+                <!-- Brand -->
+
+                {% if product.brand %}
+
+                    <p class="product-detail-brand">
+
+                        Brand:
+
+                        <strong>
+                            {{ product.brand }}
+                        </strong>
+
+                    </p>
+
+                {% endif %}
+
+
+                <!-- ==================================
+                     PRICE
+                =================================== -->
+
+                <div class="product-detail-price">
+
+                    <div class="product-price-line">
+                        <span class="product-price-label">Final Price:</span>
+                        <span class="product-current-price product-current-price--final">
+                            Rs. {{ product.final_price }}
+                        </span>
+                    </div>
+
+                    <div class="product-price-line">
+                        <span class="product-price-label">Price:</span>
+                        <span class="{% if product.discount_price %}product-original-price{% else %}product-current-price product-current-price--regular{% endif %}">
+                            Rs. {{ product.price }}
+                        </span>
+                    </div>
+
+                    {% if product.discount_price %}
+
+                        <div class="product-price-line">
+                            <span class="product-price-label">Discount Price:</span>
+                            <span class="product-discount-price">
+                                Rs. {{ product.discount_price }}
+                            </span>
+
+                            <span class="product-sale-badge">
+                                Sale
+                            </span>
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- ==================================
+                     STOCK
+                =================================== -->
+
+                <div class="product-detail-stock">
+
+                    {% if product.stock > 0 %}
+
+                        <span class="stock-status stock-in">
+
+                            <span aria-hidden="true">
+                                ✓
+                            </span>
+
+                            In Stock
+
+                        </span>
+
+                        <span class="stock-quantity">
+                            Stock: {{ product.stock }}
+                        </span>
+
+                    {% else %}
+
+                        <span class="stock-status stock-out">
+
+                            <span aria-hidden="true">
+                                ✕
+                            </span>
+
+                            Out of Stock
+
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- ==================================
+                     DESCRIPTION
+                =================================== -->
+
+                {% if product.description %}
+
+                    <hr class="product-detail-divider">
+
+                    <div class="product-detail-description">
+
+                        <h2>
+                            Product Description
+                        </h2>
+
+                        <p>
+                            {{ product.description|linebreaksbr }}
+                        </p>
+
+                    </div>
+
+                {% endif %}
+
+
+                <!-- ==================================
+                     CART ACTION
+                =================================== -->
+
+                <div class="product-detail-actions">
+
+                    {% if product.stock > 0 %}
+
+                        {% if user.is_authenticated %}
+
+                            <form
+                                method="POST"
+                                action="{% url 'cart:add' product.id %}"
+                                class="product-add-cart-form"
+                            >
+
+                                {% csrf_token %}
+
+                                <button
+                                    type="submit"
+                                    class="btn btn-primary product-add-cart-button"
+                                >
+                                    <span aria-hidden="true">🛒</span>
+                                    Add to Cart
+                                </button>
+
+                            </form>
+
+                            <form
+                                method="POST"
+                                action="{% url 'wishlist:add' product.id %}"
+                                class="product-add-wishlist-form"
+                            >
+                                {% csrf_token %}
+                                <button
+                                    type="submit"
+                                    class="btn product-add-wishlist-button"
+                                >
+                                    Add to Wishlist
+                                </button>
+                            </form>
+
+                        {% else %}
+
+                            <a
+                                href="{% url 'accounts:login' %}?next={{ request.path|urlencode }}"
+                                class="btn btn-primary product-add-cart-button"
+                            >
+                                Login to Add to Cart
+                            </a>
+
+                        {% endif %}
+
+                    {% else %}
+
+                        <button
+                            type="button"
+                            class="btn product-add-cart-button product-out-of-stock-button"
+                            disabled
+                        >
+                            Out of Stock
+                        </button>
+
+                    {% endif %}
+
+
+                    <a
+                        href="{% url 'products:list' %}"
+                        class="product-continue-link"
+                    >
+                        ← Continue Shopping
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

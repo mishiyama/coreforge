@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/reviews.css' %}">{% endblock %}
+{% block title %}Reviews | NepCart{% endblock %}
+
+{% block content %}
+<section class="reviews-page">
+    <div class="reviews-header">
+        <h1>Customer Reviews</h1>
+        <p>See what shoppers are saying about NepCart products.</p>
+    </div>
+    <div class="review-list">
+        {% for review in reviews %}
+            <article class="review-card">
+                <h2>{{ review.product.name }}</h2>
+                <p>{{ review.comment }}</p>
+            </article>
+        {% empty %}
+            <article class="review-card"><p>No reviews have been published yet.</p></article>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

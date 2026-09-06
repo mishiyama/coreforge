@@ -1,0 +1,6 @@
+@import url("products.css");
+
+/* Product list page entrypoint. */
+.product-list-page {
+    width: 100%;
+}

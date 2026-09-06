@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">{% endblock %}
+{% block title %}Dashboard | NepCart{% endblock %}
+
+{% block content %}
+<section class="dashboard-page">
+    <div class="dashboard-header">
+        <h1>Dashboard</h1>
+        <p>Overview of your NepCart activity.</p>
+    </div>
+    <div class="dashboard-grid">
+        <div class="dashboard-card"><span>Orders</span><strong>{{ order_count }}</strong></div>
+        <div class="dashboard-card"><span>Cart Items</span><strong>{{ cart_count }}</strong></div>
+        <div class="dashboard-card"><span>Wishlist Items</span><strong>{{ wishlist_count }}</strong></div>
+    </div>
+</section>
+{% endblock %}

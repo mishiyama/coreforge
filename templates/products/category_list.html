@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/category_list.css' %}">
+{% endblock %}
+
+{% block title %}
+Categories
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <h1>Categories</h1>
+
+    <ul>
+
+        {% for category in categories %}
+
+            <li>
+
+                <strong>
+                    <a href="{% url 'products:category_detail' category.slug %}">
+                        {{ category.name }}
+                    </a>
+                </strong>
+
+                <br>
+
+                {{ category.description }}
+
+            </li>
+
+        {% empty %}
+
+            <li>
+                No categories available.
+            </li>
+
+        {% endfor %}
+
+    </ul>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+Login - NepCart
+{% endblock %}
+
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/login.css' %}"
+>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="auth-page">
+
+    <div class="auth-card">
+
+        <!-- Header -->
+
+        <div class="auth-header">
+
+            <div class="auth-icon">
+                🛒
+            </div>
+
+            <h1>
+                Welcome Back
+            </h1>
+
+            <p>
+                Login to your NepCart account
+            </p>
+
+        </div>
+
+
+        <!-- Login Form -->
+
+        <form
+            method="POST"
+            class="auth-form"
+        >
+
+            {% csrf_token %}
+
+
+            <!-- General Errors -->
+
+            {% if form.non_field_errors %}
+
+                <div class="form-error">
+
+                    {{ form.non_field_errors }}
+
+                </div>
+
+            {% endif %}
+
+
+            <!-- Username -->
+
+            <div class="form-group">
+
+                <label
+                    for="{{ form.username.id_for_label }}"
+                >
+                    Username
+                </label>
+
+                {{ form.username }}
+
+                {% if form.username.errors %}
+
+                    <div class="field-error">
+
+                        {{ form.username.errors }}
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- Password -->
+
+            <div class="form-group">
+
+                <label
+                    for="{{ form.password.id_for_label }}"
+                >
+                    Password
+                </label>
+
+                {{ form.password }}
+
+                {% if form.password.errors %}
+
+                    <div class="field-error">
+
+                        {{ form.password.errors }}
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- Login Options -->
+
+            <div class="login-options">
+
+                <label
+                    for="{{ form.remember_me.id_for_label }}"
+                    class="remember-me"
+                >
+
+                    {{ form.remember_me }}
+
+                    <span>
+                        Remember me
+                    </span>
+
+                </label>
+
+
+                <a href="{% url 'accounts:password_reset' %}">
+                    Forgot password?
+                </a>
+
+            </div>
+
+
+            <!-- Submit -->
+
+            <button
+                type="submit"
+                class="auth-submit"
+            >
+                Login
+            </button>
+
+        </form>
+
+
+        <!-- Register -->
+
+        <div class="auth-footer">
+
+            <p>
+
+                Don't have an account?
+
+                <a
+                    href="{% url 'accounts:register' %}"
+                >
+                    Create an account
+                </a>
+
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

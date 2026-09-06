@@ -1,0 +1,70 @@
+@import url("products.css");
+
+.product-detail-price {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.product-price-line {
+    font-size: 1.1rem;
+    color: #374151;
+}
+
+.product-price-label {
+    font-weight: 600;
+}
+
+.product-current-price--final {
+    font-size: 1.5rem;
+    color: #111827;
+    margin-left: 4px;
+}
+
+.product-current-price--regular {
+    font-size: 1.2rem;
+    margin-left: 4px;
+    font-weight: 700;
+    color: #111827;
+}
+
+.product-discount-price {
+    color: #b91c1c;
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin-left: 4px;
+}
+
+.product-sale-badge {
+    margin-left: 8px;
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 8px;
+    border-radius: 6px;
+    background: #fee2e2;
+    color: #b91c1c;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.stock-quantity {
+    margin-left: 12px;
+}
+
+.product-detail-divider {
+    border: 0;
+    border-top: 1px solid #e5e7eb;
+    margin: 24px 0;
+}
+
+.product-add-wishlist-form {
+    margin-top: 10px;
+}
+
+.product-add-wishlist-button {
+    width: 100%;
+    color: #2563eb;
+    border: 1px solid #bfdbfe;
+    background: #eff6ff;
+}

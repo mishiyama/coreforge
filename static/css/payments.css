@@ -1,0 +1,397 @@
+/* ==========================================================================
+   PAYMENTS CSS
+   ========================================================================== */
+
+/* Layout */
+.payment-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.payment-header {
+    margin-bottom: 40px;
+}
+
+.payment-eyebrow {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-primary, #6366f1);
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+.payment-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-text-dark, #1f2937);
+    margin-bottom: 8px;
+}
+
+.payment-header p {
+    color: var(--color-text-muted, #6b7280);
+    font-size: 1rem;
+}
+
+/* Two Column Layout */
+.payment-layout {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 32px;
+    align-items: start;
+}
+
+/* Cards */
+.payment-card,
+.payment-summary {
+    background: #ffffff;
+    border: 1px solid var(--color-border, #e5e7eb);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+}
+
+.payment-card-header,
+.payment-summary-header {
+    padding: 24px;
+    border-bottom: 1px solid var(--color-border, #e5e7eb);
+    background-color: var(--color-bg-light, #f9fafb);
+}
+
+.payment-step {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-text-muted, #6b7280);
+    letter-spacing: 0.05em;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.payment-card-header h2,
+.payment-summary-header h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-text-dark, #1f2937);
+    margin: 0;
+}
+
+/* Form Styles */
+.payment-form {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Radio Options */
+.payment-option {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    border: 1px solid var(--color-border, #e5e7eb);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.payment-option:hover {
+    border-color: var(--color-primary-light, #a5b4fc);
+    background-color: var(--color-bg-light, #f9fafb);
+}
+
+.payment-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.payment-option-content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 1;
+}
+
+.payment-option-icon {
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background-color: var(--color-bg-light, #f3f4f6);
+    border-radius: 8px;
+}
+
+.payment-option-content strong {
+    display: block;
+    font-size: 1rem;
+    color: var(--color-text-dark, #1f2937);
+    margin-bottom: 4px;
+}
+
+.payment-option-content span {
+    display: block;
+    font-size: 0.875rem;
+    color: var(--color-text-muted, #6b7280);
+}
+
+/* Custom Radio Button */
+.payment-radio {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--color-border, #d1d5db);
+    border-radius: 50%;
+    position: relative;
+    margin-left: 16px;
+    transition: all 0.2s ease;
+}
+
+.payment-option input[type="radio"]:checked ~ .payment-radio {
+    border-color: var(--color-primary, #4f46e5);
+}
+
+.payment-option input[type="radio"]:checked ~ .payment-radio::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 10px;
+    height: 10px;
+    background-color: var(--color-primary, #4f46e5);
+    border-radius: 50%;
+}
+
+.payment-option input[type="radio"]:checked ~ .payment-option-content strong {
+    color: var(--color-primary, #4f46e5);
+}
+
+.payment-option:has(input[type="radio"]:checked) {
+    border-color: var(--color-primary, #4f46e5);
+    background-color: #f5f3ff;
+}
+
+/* Submit Button */
+.payment-submit {
+    margin-top: 16px;
+    background-color: var(--color-primary, #4f46e5);
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 14px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    width: 100%;
+}
+
+.payment-submit:hover {
+    background-color: var(--color-primary-dark, #4338ca);
+}
+
+/* Summary Section */
+.payment-summary-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.payment-summary-header span {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-text-muted, #6b7280);
+}
+
+.payment-summary-body {
+    padding: 24px;
+}
+
+.payment-summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    font-size: 0.9375rem;
+}
+
+.payment-summary-row span {
+    color: var(--color-text-muted, #6b7280);
+}
+
+.payment-summary-row strong {
+    color: var(--color-text-dark, #1f2937);
+}
+
+.payment-summary-divider {
+    height: 1px;
+    background-color: var(--color-border, #e5e7eb);
+    margin: 20px 0;
+}
+
+.payment-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.125rem;
+}
+
+.payment-total span {
+    font-weight: 600;
+    color: var(--color-text-dark, #1f2937);
+}
+
+.payment-total strong {
+    font-weight: 700;
+    color: var(--color-primary, #4f46e5);
+}
+
+.payment-security {
+    padding: 16px 24px;
+    background-color: var(--color-bg-light, #f9fafb);
+    border-top: 1px solid var(--color-border, #e5e7eb);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.payment-security p {
+    font-size: 0.875rem;
+    color: var(--color-text-muted, #6b7280);
+    margin: 0;
+}
+
+/* Success and Failed Pages */
+.payment-status-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh;
+    padding: 40px 20px;
+}
+
+.status-card {
+    background: #ffffff;
+    border: 1px solid var(--color-border, #e5e7eb);
+    border-radius: 12px;
+    padding: 40px;
+    text-align: center;
+    max-width: 480px;
+    width: 100%;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.status-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+    font-size: 2.5rem;
+}
+
+.status-icon.success {
+    background-color: #d1fae5;
+    color: #10b981;
+}
+
+.status-icon.error {
+    background-color: #fee2e2;
+    color: #ef4444;
+}
+
+.status-card h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-text-dark, #1f2937);
+    margin-bottom: 12px;
+}
+
+.status-card p {
+    color: var(--color-text-muted, #6b7280);
+    margin-bottom: 24px;
+    line-height: 1.5;
+}
+
+.status-details {
+    background-color: var(--color-bg-light, #f9fafb);
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 32px;
+    text-align: left;
+}
+
+.status-detail-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.status-detail-row:last-child {
+    margin-bottom: 0;
+}
+
+.status-detail-row span {
+    color: var(--color-text-muted, #6b7280);
+    font-size: 0.875rem;
+}
+
+.status-detail-row strong {
+    color: var(--color-text-dark, #1f2937);
+    font-size: 0.875rem;
+}
+
+.status-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.status-btn {
+    display: inline-block;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    font-size: 1rem;
+    width: 100%;
+}
+
+.status-btn-primary {
+    background-color: var(--color-primary, #4f46e5);
+    color: #ffffff;
+    border: 1px solid var(--color-primary, #4f46e5);
+}
+
+.status-btn-primary:hover {
+    background-color: var(--color-primary-dark, #4338ca);
+}
+
+.status-btn-secondary {
+    background-color: #ffffff;
+    color: var(--color-text-dark, #374151);
+    border: 1px solid var(--color-border, #d1d5db);
+}
+
+.status-btn-secondary:hover {
+    background-color: var(--color-bg-light, #f3f4f6);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .payment-layout {
+        grid-template-columns: 1fr;
+    }
+    
+    .status-card {
+        padding: 24px;
+    }
+}

@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
+
+{% block title %}
+NepCart - Online Shopping
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <!-- =========================
+         HERO
+    ========================== -->
+
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <p class="hero-eyebrow">
+                CURATED FOR EVERYDAY LIVING
+            </p>
+
+            <h1>
+                Welcome to NepCart
+            </h1>
+
+            <p class="hero-description">
+                Your online marketplace for quality products
+                at affordable prices.
+            </p>
+
+            <div class="hero-actions">
+
+                <a
+                    href="{% url 'products:list' %}"
+                    class="btn btn-primary hero-btn"
+                >
+                    Shop Now
+                </a>
+
+                <a
+                    href="{% url 'products:category_list' %}"
+                    class="hero-secondary-btn"
+                >
+                    Explore Categories
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         FEATURED PRODUCTS
+    ========================== -->
+
+    <section class="home-section">
+
+        <div class="section-header">
+
+            <div>
+
+                <h2>
+                    Featured Products
+                </h2>
+
+                <p>
+                    Discover some of our latest products.
+                </p>
+
+            </div>
+
+
+            <a
+                href="{% url 'products:list' %}"
+                class="section-link"
+            >
+                View All →
+            </a>
+
+        </div>
+
+
+        <div class="home-product-grid">
+
+            {% for product in products %}
+
+                <div class="home-product-card">
+
+                    {% if product.image %}
+
+                        <div class="home-product-image">
+
+                            <img
+                                src="{{ product.image.url }}"
+                                alt="{{ product.name }}"
+                            >
+
+                        </div>
+
+                    {% else %}
+
+                        <div class="home-product-image">
+                            <div class="product-placeholder">
+                                No image available
+                            </div>
+                        </div>
+
+                    {% endif %}
+
+
+                    <div class="home-product-body">
+
+                        <h3>
+                            {{ product.name }}
+                        </h3>
+
+
+                        {% if product.brand %}
+
+                            <p class="home-product-brand">
+                                {{ product.brand }}
+                            </p>
+
+                        {% endif %}
+
+
+                        <p class="home-product-description">
+                            {{ product.description|truncatewords:15 }}
+                        </p>
+
+
+                        <div class="home-product-footer">
+
+                            <strong class="home-product-price">
+                                Rs. {{ product.final_price }}
+                            </strong>
+
+
+                            <a
+                                href="{{ product.get_absolute_url }}"
+                                class="btn btn-primary"
+                            >
+                                View Product
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            {% empty %}
+
+                <p>
+                    No products available.
+                </p>
+
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+</div>
+
+{% endblock %}

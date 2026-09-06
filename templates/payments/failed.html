@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Payment Failed | NepCart
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/failed.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="payment-status-page">
+    <div class="status-card">
+        <div class="status-icon error">
+            !
+        </div>
+        
+        <h1>Payment Failed</h1>
+        
+        <p>
+            Unfortunately, your payment could not be completed. Please try again or use a different payment method.
+        </p>
+        
+        <div class="status-details">
+            <div class="status-detail-row">
+                <span>Order Number:</span>
+                <strong>#{{ order.order_number }}</strong>
+            </div>
+            <div class="status-detail-row">
+                <span>Amount:</span>
+                <strong>Rs. {{ order.total }}</strong>
+            </div>
+        </div>
+        
+        <div class="status-actions">
+            <a href="{% url 'payments:payment' order.order_number %}" class="status-btn status-btn-primary">
+                Try Again
+            </a>
+            <a href="{% url 'orders:detail' order.order_number %}" class="status-btn status-btn-secondary">
+                Back to Order
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

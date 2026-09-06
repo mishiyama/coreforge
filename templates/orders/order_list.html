@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+My Orders | NepCart
+{% endblock %}
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/order_list.css' %}"
+>
+
+{% endblock %}
+
+
+{% block content %}
+
+<section class="orders-page">
+
+    <div class="orders-container">
+
+
+        <!-- Header -->
+
+        <div class="orders-header">
+
+            <p class="orders-eyebrow">
+                ACCOUNT
+            </p>
+
+            <h1>
+                My Orders
+            </h1>
+
+            <p>
+                View and track your NepCart orders.
+            </p>
+
+        </div>
+
+
+        {% if orders %}
+
+            <div class="orders-list">
+
+                {% for order in orders %}
+
+                    <a
+                        href="{{ order.get_absolute_url }}"
+                        class="order-card"
+                    >
+
+                        <div class="order-card-main">
+
+                            <div>
+
+                                <span class="order-label">
+                                    Order
+                                </span>
+
+                                <h2>
+                                    {{ order.order_number }}
+                                </h2>
+
+                            </div>
+
+
+                            <div class="order-date">
+
+                                <span class="order-label">
+                                    Placed
+                                </span>
+
+                                <strong>
+                                    {{ order.created_at|date:"M d, Y" }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="order-card-info">
+
+                            <div class="order-info-item">
+
+                                <span>
+                                    Items
+                                </span>
+
+                                <strong>
+                                    {{ order.items.count }}
+                                </strong>
+
+                            </div>
+
+
+                            <div class="order-info-item">
+
+                                <span>
+                                    Total
+                                </span>
+
+                                <strong>
+                                    Rs. {{ order.total }}
+                                </strong>
+
+                            </div>
+
+
+                            <div class="order-info-item">
+
+                                <span>
+                                    Payment
+                                </span>
+
+                                <strong>
+                                    {{ order.get_payment_method_display }}
+                                </strong>
+
+                            </div>
+
+
+                            <div class="order-info-item">
+
+                                <span>
+                                    Status
+                                </span>
+
+                                <strong
+                                    class="order-status status-{{ order.status }}"
+                                >
+                                    {{ order.get_status_display }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="order-card-footer">
+
+                            <span>
+                                View Order Details
+                            </span>
+
+                            <span aria-hidden="true">
+                                →
+                            </span>
+
+                        </div>
+
+                    </a>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <div class="orders-empty">
+
+                <div class="orders-empty-icon">
+                    📦
+                </div>
+
+                <h2>
+                    No Orders Yet
+                </h2>
+
+                <p>
+                    You haven't placed any orders yet.
+                </p>
+
+                <a
+                    href="{% url 'products:list' %}"
+                    class="btn btn-primary"
+                >
+                    Start Shopping
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+{% endblock %}

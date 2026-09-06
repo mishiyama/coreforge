@@ -1,0 +1,6 @@
+@import url("payments.css");
+
+/* Successful payment page entrypoint. */
+.payment-success-page {
+    width: 100%;
+}

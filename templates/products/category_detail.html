@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/category_detail.css' %}">
+{% endblock %}
+
+{% block title %}
+{{ category.name }} | NepCart
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <h1>{{ category.name }}</h1>
+
+    <p>{{ category.description }}</p>
+
+    <div class="product-grid">
+
+        {% for product in products %}
+
+            <div class="product-card">
+
+                {% if product.image %}
+                    <img
+                        src="{{ product.image.url }}"
+                        alt="{{ product.name }}"
+                    >
+                {% endif %}
+
+                <div class="product-card-body">
+                    <h3>{{ product.name }}</h3>
+                    <p>{{ product.description|truncatewords:15 }}</p>
+                    <strong>Rs. {{ product.final_price }}</strong>
+
+                    <a href="{{ product.get_absolute_url }}" class="btn btn-primary">
+                        View Product
+                    </a>
+                </div>
+
+            </div>
+
+        {% empty %}
+
+            <p>No products found in this category.</p>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}

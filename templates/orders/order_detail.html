@@ -1,0 +1,339 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Order {{ order.order_number }} | NepCart
+{% endblock %}
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/order_detail.css' %}"
+>
+
+{% endblock %}
+
+
+{% block content %}
+
+<section class="order-detail-page">
+
+    <div class="order-detail-container">
+
+
+        <!-- Back -->
+
+        <div class="order-back">
+
+            <a href="{% url 'orders:list' %}">
+                ← Back to My Orders
+            </a>
+
+        </div>
+
+
+        <!-- Header -->
+
+        <div class="order-detail-header">
+
+            <div>
+
+                <p class="orders-eyebrow">
+                    ORDER
+                </p>
+
+                <h1>
+                    {{ order.order_number }}
+                </h1>
+
+                <p>
+                    Placed on
+                    {{ order.created_at|date:"F d, Y, g:i A" }}
+                </p>
+
+            </div>
+
+
+            <span
+                class="order-status status-{{ order.status }}"
+            >
+                {{ order.get_status_display }}
+            </span>
+
+        </div>
+
+
+        <div class="order-detail-layout">
+
+
+            <!-- Order Items -->
+
+            <div class="order-detail-card">
+
+                <div class="order-detail-card-header">
+
+                    <h2>
+                        Order Items
+                    </h2>
+
+                </div>
+
+
+                <div class="order-items">
+
+                    {% for item in order.items.all %}
+
+                        <div class="order-item">
+
+                            <div class="order-item-image">
+
+                                {% if item.product.image %}
+
+                                    <img
+                                        src="{{ item.product.image.url }}"
+                                        alt="{{ item.product_name }}"
+                                    >
+
+                                {% else %}
+
+                                    <span>
+                                        No Image
+                                    </span>
+
+                                {% endif %}
+
+                            </div>
+
+
+                            <div class="order-item-info">
+
+                                <h3>
+                                    {{ item.product_name }}
+                                </h3>
+
+                                <p>
+                                    Rs. {{ item.product_price }}
+                                    ×
+                                    {{ item.quantity }}
+                                </p>
+
+                            </div>
+
+
+                            <strong class="order-item-subtotal">
+
+                                Rs. {{ item.subtotal }}
+
+                            </strong>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+
+            <!-- Summary -->
+
+            <aside class="order-summary-card">
+
+                <h2>
+                    Order Summary
+                </h2>
+
+
+                <div class="order-summary-row">
+
+                    <span>
+                        Subtotal
+                    </span>
+
+                    <strong>
+                        Rs. {{ order.subtotal }}
+                    </strong>
+
+                </div>
+
+
+                <div class="order-summary-row">
+
+                    <span>
+                        Delivery
+                    </span>
+
+                    <strong>
+                        Rs. {{ order.delivery_charge }}
+                    </strong>
+
+                </div>
+
+
+                <hr>
+
+
+                <div class="order-summary-total">
+
+                    <span>
+                        Total
+                    </span>
+
+                    <strong>
+                        Rs. {{ order.total }}
+                    </strong>
+
+                </div>
+
+
+                <div class="order-payment">
+
+                    <span>
+                        Payment Method
+                    </span>
+
+                    <strong>
+                        {{ order.get_payment_method_display }}
+                    </strong>
+
+                </div>
+
+
+                <div class="order-payment">
+
+                    <span>
+                        Payment Status
+                    </span>
+
+                    <strong>
+                        {{ order.get_payment_status_display }}
+                    </strong>
+
+                </div>
+
+            </aside>
+
+
+        </div>
+
+
+        <!-- Shipping Information -->
+
+        <div class="order-detail-card order-shipping-card">
+
+            <div class="order-detail-card-header">
+
+                <h2>
+                    Shipping Information
+                </h2>
+
+            </div>
+
+
+            <div class="shipping-details">
+
+                <div>
+
+                    <span>
+                        Full Name
+                    </span>
+
+                    <strong>
+                        {{ order.full_name }}
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Email
+                    </span>
+
+                    <strong>
+                        {{ order.email }}
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Phone
+                    </span>
+
+                    <strong>
+                        {{ order.phone }}
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Address
+                    </span>
+
+                    <strong>
+                        {{ order.address }}
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        City
+                    </span>
+
+                    <strong>
+                        {{ order.city }}
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Province
+                    </span>
+
+                    <strong>
+                        {{ order.province }}
+                    </strong>
+
+                </div>
+
+
+                {% if order.postal_code %}
+
+                    <div>
+
+                        <span>
+                            Postal Code
+                        </span>
+
+                        <strong>
+                            {{ order.postal_code }}
+                        </strong>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+{% endblock %}

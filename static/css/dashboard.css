@@ -1,0 +1,8 @@
+.dashboard-page { padding: 40px 0 70px; }
+.dashboard-header { margin-bottom: 28px; }
+.dashboard-header h1 { margin: 0 0 8px; font-size: 2rem; }
+.dashboard-header p { color: var(--color-text-muted); }
+.dashboard-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.dashboard-card { padding: 24px; background: #fff; border: 1px solid var(--color-border); border-radius: 12px; box-shadow: 0 4px 16px rgba(15, 23, 42, .05); }
+.dashboard-card strong { display: block; margin-top: 8px; font-size: 2rem; color: var(--color-primary); }
+@media (max-width: 700px) { .dashboard-grid { grid-template-columns: 1fr; } }

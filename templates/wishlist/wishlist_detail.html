@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/wishlist_detail.css' %}">
+{% endblock %}
+
+{% block title %}
+Wishlist | NepCart
+{% endblock %}
+
+
+{% block content %}
+
+<section class="section">
+
+    <div class="container">
+
+        <div class="empty-page">
+
+            <div class="empty-icon">
+                ♡
+            </div>
+
+            <h1>
+                Your Wishlist
+            </h1>
+
+            {% if wishlist_items %}
+                <div class="wishlist-grid">
+                    {% for item in wishlist_items %}
+                        <article class="wishlist-card">
+                            {% if item.product.image %}
+                                <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                            {% endif %}
+                            <h2>{{ item.product.name }}</h2>
+                            <strong>Rs. {{ item.product.final_price }}</strong>
+                            <a href="{{ item.product.get_absolute_url }}" class="btn btn-primary">View Product</a>
+                            <form method="POST" action="{% url 'wishlist:remove' item.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn wishlist-remove-button">Remove</button>
+                            </form>
+                        </article>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>Products you save to your wishlist will appear here.</p>
+            {% endif %}
+
+            <a
+                href="{% url 'products:list' %}"
+                class="btn btn-primary"
+            >
+                Explore Products
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
