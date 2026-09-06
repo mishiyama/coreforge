@@ -173,8 +173,17 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Media files
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+BLOB_PUBLIC_URL = env(
+    "BLOB_PUBLIC_URL",
+    default=""
+).rstrip("/")
+
+if BLOB_PUBLIC_URL:
+    MEDIA_URL = BLOB_PUBLIC_URL + "/"
+else:
+    MEDIA_URL = "/media/"
+
+MEDIA_ROOT = BASE_DIR / "media"
 
 # eSewa ePay v2 sandbox configuration.
 ESEWA_PRODUCT_CODE = 'EPAYTEST'
