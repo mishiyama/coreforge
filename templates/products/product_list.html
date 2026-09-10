@@ -291,7 +291,7 @@ Products | NepCart
                     {% if product.image %}
 
                         <img
-                            src="{{ product.image.url }}"
+                            src="{{ product.catalog_image_url }}" onerror="this.onerror=null;this.src='/static/images/product-placeholder.svg';"
                             alt="{{ product.name }}"
                         >
 

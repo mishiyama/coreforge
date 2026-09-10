@@ -1,5 +1,14 @@
+import logging
+from pathlib import Path
+from urllib.parse import unquote, urlparse
+
+from django.contrib.staticfiles import finders
 from django.db import models
 from django.urls import reverse
+from django.templatetags.static import static
+
+
+logger = logging.getLogger(__name__)
 
 
 class Category(models.Model):
@@ -121,6 +130,31 @@ class Product(models.Model):
     @property
     def is_in_stock(self):
         return self.stock > 0
+
+    @property
+    def catalog_image_url(self):
+        """Serve fixed catalog assets statically while preserving media uploads."""
+        placeholder = static('images/product-placeholder.svg')
+        if not self.image or not self.image.name:
+            return placeholder
+
+        image_path = str(self.image.name)
+        parsed_path = urlparse(image_path).path if '://' in image_path else image_path
+        filename = Path(unquote(parsed_path)).name
+        static_path = f'products/{filename}' if filename else ''
+
+        if static_path and finders.find(static_path):
+            return static(static_path)
+
+        logger.warning(
+            'Static catalog image is missing for product %s (%s)',
+            self.pk,
+            image_path,
+        )
+        try:
+            return self.image.url
+        except ValueError:
+            return placeholder
 
     def get_absolute_url(self):
 

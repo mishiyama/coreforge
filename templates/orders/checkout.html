@@ -95,7 +95,7 @@ Checkout | NepCart
       {% for item in cart_items %}
       <div class="checkout-item">
         {% if item.product.image %}
-          <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" />
+          <img src="{{ item.product.catalog_image_url }}" alt="{{ item.product.name }}" onerror="this.onerror=null;this.src='/static/images/product-placeholder.svg';" />
         {% endif %}
 
         <div class="checkout-item-details">

@@ -1,4 +1,7 @@
-import os
+from pathlib import Path
+from urllib.parse import unquote, urlparse
+
+from django.contrib.staticfiles import finders
 from django.core.management.base import BaseCommand
 from products.models import Product
 
@@ -21,13 +24,13 @@ class Command(BaseCommand):
                 missing_images += 1
                 missing_details.append(product)
             else:
-                try:
-                    if os.path.exists(product.image.path):
-                        with_images += 1
-                    else:
-                        broken_images += 1
-                        broken_details.append(product)
-                except ValueError:
+                image_name = str(product.image.name)
+                image_path = urlparse(image_name).path if '://' in image_name else image_name
+                filename = Path(unquote(image_path)).name
+                static_path = f'products/{filename}' if filename else ''
+                if static_path and finders.find(static_path):
+                    with_images += 1
+                else:
                     broken_images += 1
                     broken_details.append(product)
                     
@@ -46,5 +49,5 @@ class Command(BaseCommand):
             
         for product in broken_details:
             self.stdout.write(self.style.ERROR(
-                f"Broken Image - Name: {product.name}, SKU: {product.sku}, Image Field: {product.image.name}, Expected file: {product.image.path if hasattr(product.image, 'path') else 'Unknown'}"
+                f"Broken Image - Name: {product.name}, SKU: {product.sku}, Image Field: {product.image.name}, Expected static file: products/{Path(unquote(urlparse(str(product.image.name)).path if '://' in str(product.image.name) else str(product.image.name))).name}"
             ))

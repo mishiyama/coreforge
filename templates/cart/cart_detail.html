@@ -86,7 +86,7 @@ Shopping Cart | NepCart
                                     {% if item.product.image %}
 
                                         <img
-                                            src="{{ item.product.image.url }}"
+                                            src="{{ item.product.catalog_image_url }}" onerror="this.onerror=null;this.src='/static/images/product-placeholder.svg';"
                                             alt="{{ item.product.name }}"
                                         >
 
