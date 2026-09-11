@@ -26,7 +26,13 @@ SECRET_KEY = 'django-insecure-5jaece4o=f%^+5u6-061(pdt6p*665*0gcdp0e#wc-13_1orn!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1","localhost",".trycloudflare.com",".vercel.app",]
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+    "localhost",
+    ".trycloudflare.com",
+    ".vercel.app",
+    "nepcart.anilrijal.info.np",
+]
 
 # Application definition
 
@@ -94,6 +100,7 @@ TEMPLATES = [
 ]
 
 CSRF_TRUSTED_ORIGINS = [
+    "https://nepcart.anilrijal.info.np",
     "https://*.vercel.app",
     "https://*.trycloudflare.com",
 ]
