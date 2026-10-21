@@ -37,7 +37,6 @@ ALLOWED_HOSTS = env.list(
         "127.0.0.1",
         "localhost",
         ".trycloudflare.com",
-        ".vercel.app",
         ".onrender.com",
     ],
 )
@@ -45,7 +44,6 @@ ALLOWED_HOSTS = env.list(
 CSRF_TRUSTED_ORIGINS = env.list(
     "DJANGO_CSRF_TRUSTED_ORIGINS",
     default=[
-        "https://*.vercel.app",
         "https://*.trycloudflare.com",
         "https://*.onrender.com",
     ],
@@ -123,10 +121,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
 
-DATABASE_URL = env(
-    "DATABASE_URL",
-    default=env("NEON_DATABASE_URL", default="")
-)
+DATABASE_URL = env("DATABASE_URL", default="")
 
 if DATABASE_URL:
     DATABASES = {

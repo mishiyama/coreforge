@@ -1,8 +1,7 @@
 # CoreForge
 
-A Django 6.1 e-commerce storefront for PC components, built on the NepCart
-project by Anil Rijal (<https://github.com/Anil702429/NepCart>) and reworked
-for production deployment.
+A Django 6.1 e-commerce storefront for PC components, with a catalogue,
+cart, wishlist, checkout, reviews and analytics.
 
 ## Features
 
@@ -21,7 +20,7 @@ for production deployment.
 | --- | --- |
 | Python | 3.12 |
 | Django | 6.1 |
-| Database | PostgreSQL (Neon / Render Postgres) or SQLite for local dev |
+| Database | PostgreSQL or SQLite for local dev |
 | Static files | WhiteNoise with a hashed manifest |
 | Media storage | Local filesystem, or S3-compatible bucket via django-storages |
 | WSGI server | Gunicorn |
@@ -57,8 +56,8 @@ python manage.py migrate
 python manage.py runserver
 ```
 
-The app falls back to a local SQLite database when neither `DATABASE_URL` nor
-`NEON_DATABASE_URL` is set, so it runs with no external services.
+The app falls back to a local SQLite database when `DATABASE_URL` is unset, so
+it runs with no external services.
 
 ### Importing the product catalogue
 
@@ -88,13 +87,12 @@ Useful flags:
 
 ### 1. Database
 
-Use a free PostgreSQL database. [Neon](https://neon.tech) has a free tier that
-does not expire, unlike Render's free Postgres instances which are deleted
-after 30 days.
+Use a free PostgreSQL database. Any managed Postgres works; pick a provider
+whose free tier does not expire.
 
-1. Create a Neon project and a branch.
+1. Create a database and a branch.
 2. Copy the connection string, for example
-   `postgresql://user:password@ep-xxx.us-east-2.aws.neon.tech/neondb?sslmode=require`.
+   `postgresql://user:password@host:5432/dbname?sslmode=require`.
 3. Keep it for the next step.
 
 ### 2. Render web service
@@ -105,7 +103,7 @@ create the service from the Render dashboard:
 1. Push the repository to GitHub.
 2. In Render, choose **New → Blueprint**, select the repository, and apply.
 3. Render will prompt for the values marked `sync: false`. Provide:
-   - `DATABASE_URL` — the Neon connection string
+   - `DATABASE_URL` — the PostgreSQL connection string
    - `ESEWA_SECRET_KEY` and `ESEWA_PRODUCT_CODE` — eSewa credentials
    - `AWS_*` — only if you configure object storage
 4. Deploy. The `preDeployCommand` applies migrations and seeds the catalogue.
@@ -160,10 +158,9 @@ When no bucket is configured, media is served from the local filesystem.
   minute to start again on the next request.
 - 512 MB RAM and 0.1 CPU.
 - Runtime uploads are lost on redeploy unless object storage is configured.
-- Render's free Postgres is deleted after 30 days, which is why Neon is
-  recommended.
+- Render's free Postgres instances are deleted after 30 days, so an external
+  database is recommended.
 
-## Credits
+## License
 
-Originally based on [NepCart](https://github.com/Anil702429/NepCart) by
-Anil Rijal.
+Released under the MIT License. See [LICENSE](LICENSE).
