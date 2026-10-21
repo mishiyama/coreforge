@@ -11,7 +11,9 @@ https://docs.djangoproject.com/en/6.1/ref/settings/
 """
 
 from pathlib import Path
+
 import environ
+from django.core.exceptions import ImproperlyConfigured
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,16 +24,44 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 env = environ.Env()
 
+INSECURE_SECRET_KEY = "django-insecure-5jaece4o=f%^+5u6-061(pdt6p*665*0gcdp0e#wc-13_1orn!"
+
+
+def env_str(name, default=""):
+    """Read a string environment variable, treating a blank value as unset.
+
+    ``environ.Env()`` returns an empty string when a variable is present but
+    empty, which silently overrides the default. Render's Blueprint prompts
+    create exactly that case when a value is left blank, so a blank variable
+    falls back to the default here instead.
+    """
+    value = env(name, default=default)
+    if value is None:
+        return default
+    value = value.strip()
+    return value or default
+
+
+def env_list(name, default):
+    """Read a comma-separated environment variable, treating a blank value as unset."""
+    value = env_str(name, default="")
+    if not value:
+        return list(default)
+    return [item.strip() for item in value.split(",") if item.strip()]
+
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env(
-    "DJANGO_SECRET_KEY",
-    default="django-insecure-5jaece4o=f%^+5u6-061(pdt6p*665*0gcdp0e#wc-13_1orn!"
-)
+SECRET_KEY = env_str("DJANGO_SECRET_KEY", default=INSECURE_SECRET_KEY)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("DJANGO_DEBUG", default=True)
 
-ALLOWED_HOSTS = env.list(
+if not DEBUG and SECRET_KEY == INSECURE_SECRET_KEY:
+    raise ImproperlyConfigured(
+        "DJANGO_SECRET_KEY must be set to a unique value when DJANGO_DEBUG is False."
+    )
+
+ALLOWED_HOSTS = env_list(
     "DJANGO_ALLOWED_HOSTS",
     default=[
         "127.0.0.1",
@@ -41,7 +71,7 @@ ALLOWED_HOSTS = env.list(
     ],
 )
 
-CSRF_TRUSTED_ORIGINS = env.list(
+CSRF_TRUSTED_ORIGINS = env_list(
     "DJANGO_CSRF_TRUSTED_ORIGINS",
     default=[
         "https://*.trycloudflare.com",
@@ -121,12 +151,19 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
 
-DATABASE_URL = env("DATABASE_URL", default="")
+DATABASE_URL = env_str("DATABASE_URL", default="")
 
 if DATABASE_URL:
     DATABASES = {
         "default": env.db_url_config(DATABASE_URL)
     }
+elif not DEBUG:
+    # The host filesystem is ephemeral on Render, so a SQLite fallback would
+    # silently drop every order, account and review on the next deploy.
+    raise ImproperlyConfigured(
+        "DATABASE_URL must be set to a PostgreSQL connection string when "
+        "DJANGO_DEBUG is False."
+    )
 else:
     DATABASES = {
         "default": {
@@ -179,13 +216,13 @@ USE_TZ = True
 # point at a real relay; without it the console backend is used in development,
 # which prints messages to the server log instead of delivering them.
 
-SMTP_HOST = env("SMTP_HOST", default="")
+SMTP_HOST = env_str("SMTP_HOST", default="")
 SMTP_PORT = env.int("SMTP_PORT", default=587)
-SMTP_USER = env("SMTP_USER", default="")
-SMTP_PASSWORD = env("SMTP_PASSWORD", default="")
+SMTP_USER = env_str("SMTP_USER", default="")
+SMTP_PASSWORD = env_str("SMTP_PASSWORD", default="")
 SMTP_USE_TLS = env.bool("SMTP_USE_TLS", default=True)
 
-DEFAULT_FROM_EMAIL = env(
+DEFAULT_FROM_EMAIL = env_str(
     "DEFAULT_FROM_EMAIL",
     default="noreply@coreforge.example",
 )
@@ -254,26 +291,26 @@ STORAGES = {
 # pictures, admin uploads) are lost on every redeploy. Point the AWS_* vars at
 # an S3-compatible bucket (Cloudflare R2, Backblaze B2, MinIO) to persist them.
 
-BLOB_PUBLIC_URL = env(
+BLOB_PUBLIC_URL = env_str(
     "BLOB_PUBLIC_URL",
     default=""
 ).rstrip("/")
 
-AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME", default="")
+AWS_STORAGE_BUCKET_NAME = env_str("AWS_STORAGE_BUCKET_NAME", default="")
 
 if AWS_STORAGE_BUCKET_NAME:
     STORAGES["default"] = {
         "BACKEND": "storages.backends.s3.S3Storage",
     }
-    AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID", default="")
-    AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY", default="")
-    AWS_STORAGE_REGION_NAME = env("AWS_STORAGE_REGION_NAME", default="auto")
-    AWS_S3_ENDPOINT_URL = env("AWS_S3_ENDPOINT_URL", default="")
-    AWS_S3_CUSTOM_DOMAIN = env("AWS_S3_CUSTOM_DOMAIN", default="")
-    AWS_S3_ADDRESSING_STYLE = env("AWS_S3_ADDRESSING_STYLE", default="path")
+    AWS_ACCESS_KEY_ID = env_str("AWS_ACCESS_KEY_ID", default="")
+    AWS_SECRET_ACCESS_KEY = env_str("AWS_SECRET_ACCESS_KEY", default="")
+    AWS_STORAGE_REGION_NAME = env_str("AWS_STORAGE_REGION_NAME", default="auto")
+    AWS_S3_ENDPOINT_URL = env_str("AWS_S3_ENDPOINT_URL", default="")
+    AWS_S3_CUSTOM_DOMAIN = env_str("AWS_S3_CUSTOM_DOMAIN", default="")
+    AWS_S3_ADDRESSING_STYLE = env_str("AWS_S3_ADDRESSING_STYLE", default="path")
     AWS_QUERYSTRING_AUTH = False
     AWS_DEFAULT_ACL = None
-    MEDIA_URL = env("MEDIA_URL", default="/media/")
+    MEDIA_URL = env_str("MEDIA_URL", default="/media/")
 elif BLOB_PUBLIC_URL:
     MEDIA_URL = BLOB_PUBLIC_URL + "/"
 else:
@@ -288,12 +325,12 @@ SERVE_MEDIA_LOCALLY = env.bool(
 )
 
 # eSewa ePay v2 sandbox configuration.
-ESEWA_PRODUCT_CODE = env("ESEWA_PRODUCT_CODE", default="EPAYTEST")
-ESEWA_SECRET_KEY = env(
+ESEWA_PRODUCT_CODE = env_str("ESEWA_PRODUCT_CODE", default="EPAYTEST")
+ESEWA_SECRET_KEY = env_str(
     "ESEWA_SECRET_KEY",
     default="8gBm/:&EnhH.1/q"
 )
-ESEWA_PAYMENT_URL = env(
+ESEWA_PAYMENT_URL = env_str(
     "ESEWA_PAYMENT_URL",
     default="https://rc-epay.esewa.com.np/api/epay/main/v2/form"
 )

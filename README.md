@@ -87,8 +87,9 @@ Useful flags:
 
 ### 1. Database
 
-Use a free PostgreSQL database. Any managed Postgres works; pick a provider
-whose free tier does not expire.
+Use a PostgreSQL database. Any managed Postgres works; pick a provider whose
+free tier does not expire. Render's own free Postgres instances are deleted
+after 30 days, so they are not suitable for a permanent deployment.
 
 1. Create a database and a branch.
 2. Copy the connection string, for example
@@ -101,36 +102,56 @@ The repository includes a [`render.yaml`](render.yaml) blueprint, so you can
 create the service from the Render dashboard:
 
 1. Push the repository to GitHub.
-2. In Render, choose **New → Blueprint**, select the repository, and apply.
-3. Render will prompt for the values marked `sync: false`. Provide:
-   - `DATABASE_URL` — the PostgreSQL connection string
-   - `ESEWA_SECRET_KEY` and `ESEWA_PRODUCT_CODE` — eSewa credentials
-   - `AWS_*` — only if you configure object storage
-4. Deploy. The `preDeployCommand` applies migrations and seeds the catalogue.
+2. In Render, choose **New → Blueprint**, select the repository, branch `main`,
+   and apply.
+3. Render prompts for the one value marked `sync: false`:
+   - `DATABASE_URL` — the PostgreSQL connection string from step 1
+4. Deploy. The build installs dependencies, collects static files, applies
+   migrations and seeds the catalogue.
 
-You can also create the service manually:
+Everything else is already set by the blueprint. You can also create the
+service manually with **New → Web Service**:
 
-- **Build command:** `./build.sh`
-- **Start command:** `gunicorn config.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 120`
-- **Pre-deploy command:** `python manage.py migrate --noinput && python manage.py seed_catalog`
+- **Build command:** `bash build.sh`
+- **Start command:** `gunicorn config.wsgi:application --bind 0.0.0.0:$PORT --workers 1 --worker-class gthread --threads 4 --timeout 120`
 - **Health check path:** `/healthz/`
-- **Python version:** 3.12.11 (set via `.python-version`)
+- **Python version:** 3.12.11 (set via `.python-version` and `PYTHON_VERSION`)
+
+Migrations run inside the build command on purpose: Render only supports a
+pre-deploy command on **paid** web services, so a blueprint pinned to the free
+plan would otherwise start against an empty database.
 
 The service URL looks like `https://coreforge.onrender.com`. The blueprint
 already allows `*.onrender.com` hosts and CSRF origins, so no further change is
-needed unless you attach a custom domain.
+needed unless you attach a custom domain — add the domain to both
+`DJANGO_ALLOWED_HOSTS` and `DJANGO_CSRF_TRUSTED_ORIGINS` if you do.
 
-### 3. Required environment variables
+### 3. Environment variables
 
-| Variable | Required | Description |
+The blueprint sets these, so you normally do not need to touch them:
+
+| Variable | Value | Description |
 | --- | --- | --- |
-| `DJANGO_SECRET_KEY` | yes | Generate with `python -c "import secrets; print(secrets.token_urlsafe(64))"` |
-| `DJANGO_DEBUG` | yes | Set to `False` in production |
-| `DATABASE_URL` | yes | PostgreSQL connection string |
-| `DJANGO_ALLOWED_HOSTS` | yes | Comma-separated host list, e.g. `.onrender.com` |
-| `DJANGO_CSRF_TRUSTED_ORIGINS` | yes | Comma-separated origins, e.g. `https://*.onrender.com` |
-| `ESEWA_SECRET_KEY` | yes | eSewa ePay v2 secret key |
-| `ESEWA_PRODUCT_CODE` | yes | eSewa product code (`EPAYTEST` for sandbox) |
+| `DJANGO_SECRET_KEY` | generated | Render generates a random secret on every apply |
+| `DJANGO_DEBUG` | `False` | Must be `False` in production |
+| `DATABASE_URL` | prompted | PostgreSQL connection string |
+| `DJANGO_ALLOWED_HOSTS` | `.onrender.com` | Comma-separated host list |
+| `DJANGO_CSRF_TRUSTED_ORIGINS` | `https://*.onrender.com` | Comma-separated origins |
+
+With `DJANGO_DEBUG=False` the app refuses to start unless `DATABASE_URL` is
+set and `DJANGO_SECRET_KEY` is not the bundled development default, so a
+misconfigured deploy fails loudly instead of silently writing to an ephemeral
+SQLite file.
+
+Add these in the Render dashboard only if you need them:
+
+| Variable | Description |
+| --- | --- |
+| `ESEWA_SECRET_KEY` | eSewa ePay v2 secret key; defaults to the sandbox key |
+| `ESEWA_PRODUCT_CODE` | eSewa product code; defaults to `EPAYTEST` (sandbox) |
+| `AWS_STORAGE_BUCKET_NAME` and friends | Enables S3 media storage, see section 4 |
+| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD` | Outbound email relay |
+| `DEFAULT_FROM_EMAIL` | Sender address for outgoing email |
 
 ### 4. Media storage
 
@@ -156,10 +177,13 @@ When no bucket is configured, media is served from the local filesystem.
 
 - The service spins down after 15 minutes without traffic and takes about a
   minute to start again on the next request.
-- 512 MB RAM and 0.1 CPU.
+- 512 MB RAM and 0.1 CPU. The start command uses a single Gunicorn worker with
+  threads, which matches the recommended concurrency for this plan.
 - Runtime uploads are lost on redeploy unless object storage is configured.
 - Render's free Postgres instances are deleted after 30 days, so an external
   database is recommended.
+- Pre-deploy commands are not available on free web services, so migrations
+  run during the build. A build that fails to migrate aborts the deploy.
 
 ## License
 
