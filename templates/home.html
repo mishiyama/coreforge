@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block title %}
-NepCart - Online Shopping
+COREFORGE - Online Shopping
 {% endblock %}
 
 {% block content %}
@@ -26,7 +26,7 @@ NepCart - Online Shopping
             </p>
 
             <h1>
-                Welcome to NepCart
+                Welcome to COREFORGE
             </h1>
 
             <p class="hero-description">
@@ -99,7 +99,7 @@ NepCart - Online Shopping
                         <div class="home-product-image">
 
                             <img
-                                src="{{ product.catalog_image_url }}" onerror="this.onerror=null;this.src='/static/images/product-placeholder.svg';"
+                                src="{{ product.catalog_image_url }}" onerror="this.onerror=null;this.src='{% static 'images/product-placeholder.svg' %}';"
                                 alt="{{ product.name }}"
                             >
 

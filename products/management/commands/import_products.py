@@ -20,7 +20,7 @@ csv.field_size_limit(sys.maxsize)
 
 
 class Command(BaseCommand):
-    help = 'Import NepCart products from an Amazon-style CSV file.'
+    help = 'Import COREFORGE products from an Amazon-style CSV file.'
 
     def add_arguments(self, parser):
         parser.add_argument('csv_file', type=str)

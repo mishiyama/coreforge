@@ -6,13 +6,13 @@
 {% endblock %}
 
 {% block title %}
-Products | NepCart
+Products | COREFORGE
 {% endblock %}
 
 
 {% block content %}
 
-<div class="products-page">
+<div class="products-page product-list-page">
 
 
     <!-- ==========================================
@@ -291,7 +291,7 @@ Products | NepCart
                     {% if product.image %}
 
                         <img
-                            src="{{ product.catalog_image_url }}" onerror="this.onerror=null;this.src='/static/images/product-placeholder.svg';"
+                            src="{{ product.catalog_image_url }}" onerror="this.onerror=null;this.src='{% static 'images/product-placeholder.svg' %}';"
                             alt="{{ product.name }}"
                         >
 

@@ -6,12 +6,12 @@
 {% endblock %}
 
 {% block title %}
-{{ category.name }} | NepCart
+{{ category.name }} | COREFORGE
 {% endblock %}
 
 {% block content %}
 
-<div class="container">
+<div class="container category-detail-page">
 
     <h1>{{ category.name }}</h1>
 
@@ -25,7 +25,7 @@
 
                 {% if product.image %}
                     <img
-                        src="{{ product.catalog_image_url }}" onerror="this.onerror=null;this.src='/static/images/product-placeholder.svg';"
+                        src="{{ product.catalog_image_url }}" onerror="this.onerror=null;this.src='{% static 'images/product-placeholder.svg' %}';"
                         alt="{{ product.name }}"
                     >
                 {% endif %}

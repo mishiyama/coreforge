@@ -1,7 +1,23 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" role="img" aria-labelledby="title desc">
   <title id="title">Product image unavailable</title>
-  <desc id="desc">A neutral placeholder for a missing product image.</desc>
-  <rect width="640" height="480" fill="#eef1f4"/>
-  <path d="M164 350l91-102 64 68 53-58 104 92H164z" fill="#c7ced6"/>
-  <circle cx="402" cy="174" r="34" fill="#c7ced6"/>
+  <desc id="desc">A dark neon placeholder for a missing product image.</desc>
+  <defs>
+    <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0c1930"/>
+      <stop offset="0.55" stop-color="#11152e"/>
+      <stop offset="1" stop-color="#24122f"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#2de2ff"/>
+      <stop offset="0.5" stop-color="#9d75ff"/>
+      <stop offset="1" stop-color="#ee56c7"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="480" fill="url(#panel)"/>
+  <path d="M0 72h640M0 144h640M0 216h640M0 288h640M0 360h640M72 0v480M144 0v480M216 0v480M288 0v480M360 0v480M432 0v480M504 0v480" stroke="#26385c" stroke-opacity=".32"/>
+  <path d="M48 48h544v384H48z" fill="none" stroke="url(#edge)" stroke-width="3"/>
+  <path d="M142 350l94-106 65 70 54-60 111 96H142z" fill="#172b4a" stroke="#2de2ff" stroke-opacity=".45" stroke-width="3"/>
+  <circle cx="407" cy="166" r="36" fill="#2a1744" stroke="#ee56c7" stroke-width="3"/>
+  <path d="M392 166h30M407 151v30" stroke="#ff63d7" stroke-width="3" stroke-linecap="round"/>
+  <text x="320" y="408" fill="#b2c0d6" font-family="sans-serif" font-size="18" text-anchor="middle" letter-spacing="3">IMAGE UNAVAILABLE</text>
 </svg>

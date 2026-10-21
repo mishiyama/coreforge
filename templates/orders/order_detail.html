@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}
-Order {{ order.order_number }} | NepCart
+Order {{ order.order_number }} | COREFORGE
 {% endblock %}
 
 {% block extra_css %}
@@ -91,7 +91,7 @@ Order {{ order.order_number }} | NepCart
                                 {% if item.product.image %}
 
                                     <img
-                                        src="{{ item.product.catalog_image_url }}" onerror="this.onerror=null;this.src='/static/images/product-placeholder.svg';"
+                                        src="{{ item.product.catalog_image_url }}" onerror="this.onerror=null;this.src='{% static 'images/product-placeholder.svg' %}';"
                                         alt="{{ item.product_name }}"
                                     >
 

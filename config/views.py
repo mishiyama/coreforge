@@ -1,6 +1,14 @@
+from django.http import JsonResponse
 from django.shortcuts import render
 
 from products.models import Product, Category
+
+
+def health(request):
+
+    return JsonResponse({
+        'status': 'ok',
+    })
 
 
 def home(request):

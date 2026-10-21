@@ -1,340 +1,301 @@
-/* =========================================================
-   PAYMENT PAGE
-========================================================= */
-
 .payment-page {
+    width: 100%;
     max-width: 1100px;
+    min-width: 0;
     margin: 0 auto;
-    padding: 60px 24px 80px;
+    padding: 0 0 2rem;
 }
 
-
-/* =========================================================
-   HEADER
-========================================================= */
-
 .payment-header {
-    margin-bottom: 36px;
+    margin-bottom: 2rem;
 }
 
 .payment-eyebrow {
-    margin: 0 0 8px;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    color: #777;
+    margin-bottom: 0.5rem;
+    color: var(--color-primary);
 }
 
 .payment-header h1 {
-    margin: 0;
-    font-size: 36px;
-    line-height: 1.15;
-    color: #171717;
+    margin-bottom: 0.55rem;
+    color: var(--color-text);
+    font-size: clamp(1.8rem, 3vw, 2.45rem);
 }
 
 .payment-header p:last-child {
-    margin: 12px 0 0;
-    color: #777;
-    font-size: 15px;
+    color: var(--color-text-secondary);
+    font-size: 0.92rem;
 }
-
-
-/* =========================================================
-   LAYOUT
-========================================================= */
 
 .payment-layout {
+    min-width: 0;
     display: grid;
-    grid-template-columns: minmax(0, 1.6fr) minmax(300px, 0.9fr);
-    gap: 28px;
+    grid-template-columns: minmax(0, 1.55fr) minmax(290px, 0.9fr);
     align-items: start;
+    gap: 1.5rem;
 }
 
-
-/* =========================================================
-   PAYMENT CARD
-========================================================= */
-
-.payment-card {
-    background: #fff;
-    border: 1px solid #e8e8e8;
-    border-radius: 18px;
+.payment-card,
+.payment-summary {
+    min-width: 0;
     overflow: hidden;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: rgba(12, 20, 38, 0.9);
+    box-shadow: var(--shadow-md);
 }
 
 .payment-card-header {
-    padding: 26px 28px;
-    border-bottom: 1px solid #ededed;
+    padding: 1.5rem 1.6rem;
+    border-bottom: 1px solid var(--color-border);
+    background: rgba(16, 26, 48, 0.5);
 }
 
 .payment-step {
     display: block;
-    margin-bottom: 7px;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    color: #888;
+    margin-bottom: 0.35rem;
+    color: var(--color-primary);
+    font-size: 0.67rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
 }
 
 .payment-card-header h2 {
-    margin: 0;
-    font-size: 22px;
-    color: #171717;
+    color: var(--color-text);
+    font-size: 1.15rem;
 }
-
-
-/* =========================================================
-   PAYMENT FORM
-========================================================= */
 
 .payment-form {
-    padding: 24px 28px 28px;
+    min-width: 0;
+    padding: 1.5rem 1.6rem 1.6rem;
 }
-
-
-/* =========================================================
-   PAYMENT OPTIONS
-========================================================= */
 
 .payment-option {
     position: relative;
+    min-width: 0;
+    margin-bottom: 0.8rem;
+    padding: 1rem;
     display: block;
-    margin-bottom: 14px;
-    padding: 20px;
-    border: 1px solid #dedede;
-    border-radius: 14px;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-md);
+    background: rgba(9, 15, 32, 0.6);
     cursor: pointer;
-    transition:
-        border-color 0.2s ease,
-        box-shadow 0.2s ease,
-        background 0.2s ease;
+    transition: border-color 180ms ease, background-color 180ms ease, box-shadow 180ms ease;
 }
 
 .payment-option:hover {
-    border-color: #bdbdbd;
+    border-color: rgba(45, 226, 255, 0.6);
+    background: var(--color-surface-hover);
 }
 
-.payment-option input {
+.payment-option:has(input[type="radio"]:checked) {
+    border-color: var(--color-primary);
+    background: rgba(45, 226, 255, 0.08);
+    box-shadow: var(--focus-ring);
+}
+
+.payment-option input[type="radio"] {
     position: absolute;
+    width: 1px;
+    height: 1px;
     opacity: 0;
-    pointer-events: none;
-}
-
-.payment-option:has(input:checked) {
-    border-color: #111;
-    background: #fafafa;
-    box-shadow: 0 0 0 1px #111;
 }
 
 .payment-option-content {
+    min-width: 0;
+    padding-right: 2rem;
     display: flex;
     align-items: center;
-    gap: 16px;
-    padding-right: 35px;
+    gap: 0.85rem;
 }
 
 .payment-option-icon {
-    width: 46px;
-    height: 46px;
-    flex: 0 0 46px;
+    width: 44px;
+    height: 44px;
+    flex: 0 0 44px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 12px;
-    background: #f1f1f1;
-    font-size: 21px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--gradient-rgb-soft);
+    font-size: 1.2rem;
+}
+
+.payment-option-content > div:last-child {
+    min-width: 0;
 }
 
 .payment-option-content strong {
     display: block;
-    margin-bottom: 5px;
-    font-size: 15px;
-    color: #171717;
+    margin-bottom: 0.2rem;
+    color: var(--color-text);
+    font-size: 0.9rem;
 }
 
 .payment-option-content span {
     display: block;
-    font-size: 13px;
+    color: var(--color-text-secondary);
+    font-size: 0.75rem;
     line-height: 1.5;
-    color: #777;
 }
-
-
-/* =========================================================
-   CUSTOM RADIO
-========================================================= */
 
 .payment-radio {
     position: absolute;
     top: 50%;
-    right: 20px;
-    width: 20px;
-    height: 20px;
-    transform: translateY(-50%);
-    border: 2px solid #bbb;
+    right: 1rem;
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--color-border-strong);
     border-radius: 50%;
+    transform: translateY(-50%);
 }
 
-.payment-option:has(input:checked) .payment-radio {
-    border-color: #111;
+.payment-option input[type="radio"]:checked ~ .payment-radio {
+    border-color: var(--color-primary);
 }
 
-.payment-option:has(input:checked) .payment-radio::after {
+.payment-option input[type="radio"]:checked ~ .payment-radio::after {
     content: "";
     position: absolute;
     top: 50%;
     left: 50%;
     width: 8px;
     height: 8px;
-    transform: translate(-50%, -50%);
     border-radius: 50%;
-    background: #111;
+    background: var(--color-primary);
+    transform: translate(-50%, -50%);
 }
 
-
-/* =========================================================
-   SUBMIT BUTTON
-========================================================= */
+.payment-option input[type="radio"]:focus-visible ~ .payment-radio {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 3px;
+    box-shadow: var(--focus-ring);
+}
 
 .payment-submit {
     width: 100%;
-    margin-top: 12px;
-    padding: 15px 20px;
-    border: none;
-    border-radius: 10px;
-    background: #111;
-    color: #fff;
-    font-size: 15px;
-    font-weight: 700;
-    cursor: pointer;
-    transition:
-        transform 0.2s ease,
-        opacity 0.2s ease;
+    min-height: 48px;
+    margin-top: 1rem;
+    padding: 0.8rem 1rem;
+    border: 0;
+    border-radius: var(--radius-sm);
+    color: var(--color-primary-contrast);
+    background: var(--gradient-rgb);
+    box-shadow: 0 8px 24px rgba(45, 226, 255, 0.12);
+    font-size: 0.9rem;
+    font-weight: 800;
 }
 
 .payment-submit:hover {
-    opacity: 0.9;
-    transform: translateY(-1px);
+    box-shadow: 0 10px 28px rgba(45, 226, 255, 0.2);
+    filter: brightness(1.08);
 }
-
-
-/* =========================================================
-   ORDER SUMMARY
-========================================================= */
 
 .payment-summary {
     position: sticky;
-    top: 24px;
-    background: #fff;
-    border: 1px solid #e8e8e8;
-    border-radius: 18px;
-    overflow: hidden;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+    top: calc(var(--header-height) + 1.25rem);
 }
 
 .payment-summary-header {
-    padding: 25px;
-    background: #fafafa;
-    border-bottom: 1px solid #e8e8e8;
+    min-width: 0;
+    padding: 1.35rem;
+    border-bottom: 1px solid var(--color-border);
+    background: rgba(16, 26, 48, 0.5);
 }
 
 .payment-summary-header > span {
     display: block;
-    margin-bottom: 7px;
-    font-size: 11px;
-    font-weight: 700;
+    margin-bottom: 0.35rem;
+    color: var(--color-primary);
+    font-size: 0.66rem;
+    font-weight: 800;
     letter-spacing: 0.1em;
-    color: #888;
 }
 
 .payment-summary-header h2 {
-    margin: 0;
-    font-size: 20px;
-    color: #171717;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    color: var(--color-text);
+    font-size: 1rem;
 }
 
 .payment-summary-body {
-    padding: 25px;
+    min-width: 0;
+    padding: 1.35rem;
+}
+
+.payment-summary-row,
+.payment-total {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
 }
 
 .payment-summary-row {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-    margin-bottom: 15px;
-    font-size: 14px;
+    margin-bottom: 0.85rem;
+    font-size: 0.8rem;
 }
 
-.payment-summary-row span {
-    color: #777;
+.payment-summary-row span,
+.payment-total span {
+    color: var(--color-text-secondary);
 }
 
 .payment-summary-row strong {
-    color: #222;
+    color: var(--color-text);
+    text-align: right;
+    overflow-wrap: anywhere;
 }
 
 .payment-summary-divider {
     height: 1px;
-    margin: 20px 0;
-    background: #e8e8e8;
-}
-
-.payment-total {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
+    margin: 1.15rem 0;
+    background: var(--color-border);
 }
 
 .payment-total span {
-    font-size: 15px;
-    font-weight: 700;
+    color: var(--color-text);
+    font-size: 0.9rem;
+    font-weight: 750;
 }
 
 .payment-total strong {
-    font-size: 22px;
-    color: #111;
+    color: var(--color-primary-hover);
+    font-size: 1.2rem;
 }
-
-
-/* =========================================================
-   SECURITY
-========================================================= */
 
 .payment-security {
+    min-width: 0;
+    padding: 1rem 1.35rem;
     display: flex;
     align-items: flex-start;
-    gap: 10px;
-    padding: 18px 25px;
-    border-top: 1px solid #e8e8e8;
-    background: #fafafa;
-}
-
-.payment-security span {
-    font-size: 15px;
+    gap: 0.6rem;
+    border-top: 1px solid var(--color-border);
+    background: rgba(9, 15, 32, 0.6);
 }
 
 .payment-security p {
-    margin: 0;
-    font-size: 12px;
+    color: var(--color-text-muted);
+    font-size: 0.72rem;
     line-height: 1.5;
-    color: #777;
 }
 
+.esewa-redirect-page {
+    display: flex;
+    justify-content: center;
+}
 
-/* =========================================================
-   RESPONSIVE
-========================================================= */
+.esewa-redirect-page .payment-card {
+    width: min(100%, 560px);
+    margin-top: 2rem;
+}
 
 @media (max-width: 800px) {
-
     .payment-page {
-        padding: 40px 18px 60px;
-    }
-
-    .payment-header h1 {
-        font-size: 30px;
+        padding-bottom: 1.5rem;
     }
 
     .payment-layout {
@@ -344,33 +305,29 @@
     .payment-summary {
         position: static;
     }
-
 }
 
-
 @media (max-width: 500px) {
-
     .payment-card-header,
     .payment-form,
     .payment-summary-header,
     .payment-summary-body {
-        padding-left: 20px;
-        padding-right: 20px;
+        padding-right: 1rem;
+        padding-left: 1rem;
     }
 
     .payment-option {
-        padding: 16px;
+        padding: 0.85rem;
     }
 
     .payment-option-content {
-        gap: 12px;
+        gap: 0.65rem;
     }
 
     .payment-option-icon {
-        width: 40px;
-        height: 40px;
-        flex-basis: 40px;
-        font-size: 18px;
+        width: 38px;
+        height: 38px;
+        flex-basis: 38px;
+        font-size: 1rem;
     }
-
 }

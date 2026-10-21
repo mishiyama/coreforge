@@ -20,19 +20,36 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
 
+env = environ.Env()
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-5jaece4o=f%^+5u6-061(pdt6p*665*0gcdp0e#wc-13_1orn!'
+SECRET_KEY = env(
+    "DJANGO_SECRET_KEY",
+    default="django-insecure-5jaece4o=f%^+5u6-061(pdt6p*665*0gcdp0e#wc-13_1orn!"
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env.bool("DJANGO_DEBUG", default=True)
 
-ALLOWED_HOSTS = [
-    "127.0.0.1",
-    "localhost",
-    ".trycloudflare.com",
-    ".vercel.app",
-    "nepcart.anilrijal.info.np",
-]
+ALLOWED_HOSTS = env.list(
+    "DJANGO_ALLOWED_HOSTS",
+    default=[
+        "127.0.0.1",
+        "localhost",
+        ".trycloudflare.com",
+        ".vercel.app",
+        ".onrender.com",
+    ],
+)
+
+CSRF_TRUSTED_ORIGINS = env.list(
+    "DJANGO_CSRF_TRUSTED_ORIGINS",
+    default=[
+        "https://*.vercel.app",
+        "https://*.trycloudflare.com",
+        "https://*.onrender.com",
+    ],
+)
 
 # Application definition
 
@@ -44,7 +61,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    #NepCart apps
+    #COREFORGE apps
     'accounts',
     'products',
     'cart',
@@ -59,6 +76,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -88,21 +106,15 @@ TEMPLATES = [
 
                 'django.contrib.messages.context_processors.messages',
 
-                # NepCart cart context processor
+                # COREFORGE cart context processor
                 'cart.context_processors.cart_count',
 
-                # NepCart navbar categories
+                # COREFORGE navbar categories
                 'products.context_processors.navbar_categories',
 
             ],
         },
     },
-]
-
-CSRF_TRUSTED_ORIGINS = [
-    "https://nepcart.anilrijal.info.np",
-    "https://*.vercel.app",
-    "https://*.trycloudflare.com",
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
@@ -111,14 +123,22 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
 
-env = environ.Env()
+DATABASE_URL = env(
+    "DATABASE_URL",
+    default=env("NEON_DATABASE_URL", default="")
+)
 
-DATABASES = {
-    "default": env.db(
-        "NEON_DATABASE_URL",
-        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
-    )
-}
+if DATABASE_URL:
+    DATABASES = {
+        "default": env.db_url_config(DATABASE_URL)
+    }
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
 
 
 # Password validation
@@ -156,16 +176,58 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.1/howto/static-files/
 
 
-
-
 # Email
-# https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
+# https://docs.djangoproject.com/en/6.1/ref/settings/#email/#topic-email-configuration
+#
+# Django 6.1 replaced the legacy EMAIL_* settings with MAILERS, so the SMTP
+# connection details are read from SMTP_* variables instead. Set SMTP_HOST to
+# point at a real relay; without it the console backend is used in development,
+# which prints messages to the server log instead of delivering them.
 
-MAILERS = {
-    'default': {
-        'BACKEND': 'django.core.mail.backends.console.EmailBackend',
-    },
-}
+SMTP_HOST = env("SMTP_HOST", default="")
+SMTP_PORT = env.int("SMTP_PORT", default=587)
+SMTP_USER = env("SMTP_USER", default="")
+SMTP_PASSWORD = env("SMTP_PASSWORD", default="")
+SMTP_USE_TLS = env.bool("SMTP_USE_TLS", default=True)
+
+DEFAULT_FROM_EMAIL = env(
+    "DEFAULT_FROM_EMAIL",
+    default="noreply@coreforge.example",
+)
+
+if SMTP_HOST:
+    MAILERS = {
+        'default': {
+            'BACKEND': 'django.core.mail.backends.smtp.EmailBackend',
+            'OPTIONS': {
+                'host': SMTP_HOST,
+                'port': SMTP_PORT,
+                'username': SMTP_USER,
+                'password': SMTP_PASSWORD,
+                'use_tls': SMTP_USE_TLS,
+            },
+        },
+    }
+elif DEBUG:
+    MAILERS = {
+        'default': {
+            'BACKEND': 'django.core.mail.backends.console.EmailBackend',
+        },
+    }
+else:
+    # Production default is the SMTP backend so `manage.py check --deploy`
+    # stays clean. The app does not currently send any email, so an
+    # unreachable relay is not fatal.
+    MAILERS = {
+        'default': {
+            'BACKEND': 'django.core.mail.backends.smtp.EmailBackend',
+            'OPTIONS': {
+                'host': 'localhost',
+                'port': SMTP_PORT,
+                'use_tls': SMTP_USE_TLS,
+            },
+        },
+    }
 
 # Static files
 
@@ -177,22 +239,80 @@ STATICFILES_DIRS = [
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": (
+            "config.storage.StaticFilesStorage"
+            if not DEBUG
+            else "django.contrib.staticfiles.storage.StaticFilesStorage"
+        ),
+    },
+}
+
 
 # Media files
+#
+# Render's free tier has an ephemeral filesystem, so runtime uploads (profile
+# pictures, admin uploads) are lost on every redeploy. Point the AWS_* vars at
+# an S3-compatible bucket (Cloudflare R2, Backblaze B2, MinIO) to persist them.
 
 BLOB_PUBLIC_URL = env(
     "BLOB_PUBLIC_URL",
     default=""
 ).rstrip("/")
 
-if BLOB_PUBLIC_URL:
+AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME", default="")
+
+if AWS_STORAGE_BUCKET_NAME:
+    STORAGES["default"] = {
+        "BACKEND": "storages.backends.s3.S3Storage",
+    }
+    AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID", default="")
+    AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY", default="")
+    AWS_STORAGE_REGION_NAME = env("AWS_STORAGE_REGION_NAME", default="auto")
+    AWS_S3_ENDPOINT_URL = env("AWS_S3_ENDPOINT_URL", default="")
+    AWS_S3_CUSTOM_DOMAIN = env("AWS_S3_CUSTOM_DOMAIN", default="")
+    AWS_S3_ADDRESSING_STYLE = env("AWS_S3_ADDRESSING_STYLE", default="path")
+    AWS_QUERYSTRING_AUTH = False
+    AWS_DEFAULT_ACL = None
+    MEDIA_URL = env("MEDIA_URL", default="/media/")
+elif BLOB_PUBLIC_URL:
     MEDIA_URL = BLOB_PUBLIC_URL + "/"
 else:
     MEDIA_URL = "/media/"
 
 MEDIA_ROOT = BASE_DIR / "media"
 
+# Serve MEDIA_ROOT through Django when no external object store is configured.
+SERVE_MEDIA_LOCALLY = env.bool(
+    "SERVE_MEDIA_LOCALLY",
+    default=not AWS_STORAGE_BUCKET_NAME and not BLOB_PUBLIC_URL,
+)
+
 # eSewa ePay v2 sandbox configuration.
-ESEWA_PRODUCT_CODE = 'EPAYTEST'
-ESEWA_SECRET_KEY = '8gBm/:&EnhH.1/q'
-ESEWA_PAYMENT_URL = 'https://rc-epay.esewa.com.np/api/epay/main/v2/form'
+ESEWA_PRODUCT_CODE = env("ESEWA_PRODUCT_CODE", default="EPAYTEST")
+ESEWA_SECRET_KEY = env(
+    "ESEWA_SECRET_KEY",
+    default="8gBm/:&EnhH.1/q"
+)
+ESEWA_PAYMENT_URL = env(
+    "ESEWA_PAYMENT_URL",
+    default="https://rc-epay.esewa.com.np/api/epay/main/v2/form"
+)
+
+# Proxy / HTTPS handling behind Render's edge proxy.
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+if not DEBUG:
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_REFERRER_POLICY = "same-origin"
+    X_FRAME_OPTIONS = "DENY"
+    SECURE_SSL_REDIRECT = True
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True

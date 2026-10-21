@@ -3,7 +3,7 @@ from .models import Category
 
 def navbar_categories(request):
     """
-    Provide active categories globally for the NepCart navbar.
+    Provide active categories globally for the COREFORGE navbar.
     """
 
     return {

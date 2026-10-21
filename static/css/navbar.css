@@ -1,50 +1,25 @@
-/* =========================================================
-   NEPCART NAVBAR
-========================================================= */
-
-:root {
-    --primary-color: #2563eb;
-    --primary-hover: #1d4ed8;
-    --text-primary: #111827;
-    --text-secondary: #4b5563;
-    --border-color: #e5e7eb;
-    --container-width: 1200px;
-    --container-padding: 20px;
-}
-
-/* ---------------------------------------------------------
-   HEADER
---------------------------------------------------------- */
-
 .site-header {
     position: fixed;
     top: 0;
-    left: 0;
     right: 0;
-    width: 100%;
-    height: 72px;
-    background: rgba(255, 255, 255, 0.96);
-    border-bottom: 1px solid var(--border-color);
-    box-shadow: 0 2px 12px rgba(15, 23, 42, 0.06);
+    left: 0;
     z-index: 1000;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    width: 100%;
+    height: var(--header-height);
+    border-bottom: 1px solid rgba(49, 69, 101, 0.72);
+    background: rgba(5, 7, 19, 0.88);
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.28), 0 1px 0 rgba(45, 226, 255, 0.08);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
 }
-
-/* ---------------------------------------------------------
-   NAVBAR
---------------------------------------------------------- */
 
 .navbar {
     width: 100%;
     height: 100%;
 }
 
-/* ---------------------------------------------------------
-   CONTAINER
---------------------------------------------------------- */
-
 .nav-container {
+    position: relative;
     width: 100%;
     max-width: var(--container-width);
     height: 100%;
@@ -53,289 +28,92 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 1rem;
 }
 
-/* ---------------------------------------------------------
-   LOGO
---------------------------------------------------------- */
-
 .logo {
+    flex: 0 0 auto;
     display: inline-flex;
     align-items: center;
-    color: var(--primary-color);
-    font-size: 1.5rem;
-    font-weight: 800;
-    letter-spacing: -0.5px;
+    color: var(--color-primary);
+    font-size: 1.45rem;
+    font-weight: 900;
+    letter-spacing: -0.06em;
     white-space: nowrap;
-    text-decoration: none;
-    transition:
-        color 0.2s ease,
-        transform 0.2s ease;
+    text-shadow: 0 0 20px rgba(45, 226, 255, 0.18);
 }
 
 .logo:hover {
-    color: var(--primary-hover);
+    color: var(--color-primary-hover);
     transform: translateY(-1px);
 }
 
-/* ---------------------------------------------------------
-   NAVIGATION LINKS
---------------------------------------------------------- */
-
 .nav-links {
+    min-width: 0;
     display: flex;
     align-items: center;
-    gap: 1.35rem;
+    justify-content: flex-end;
+    gap: clamp(0.55rem, 1.45vw, 1.2rem);
 }
 
-.nav-link {
+.nav-link,
+.profile-nav-link {
     position: relative;
     display: inline-flex;
     align-items: center;
-    height: 72px;
-    color: var(--text-secondary);
-    font-size: 0.9375rem;
-    font-weight: 600;
-    text-decoration: none;
+    height: var(--header-height);
+    color: var(--color-text-secondary);
+    font-size: 0.85rem;
+    font-weight: 650;
     white-space: nowrap;
-    transition: color 0.2s ease;
 }
-
-.nav-link:hover {
-    color: var(--primary-color);
-}
-
-/* ---------------------------------------------------------
-   LINK UNDERLINE
---------------------------------------------------------- */
 
 .nav-link::after {
     content: "";
     position: absolute;
-    left: 0;
     right: 0;
     bottom: 0;
+    left: 0;
     height: 2px;
-    background: var(--primary-color);
+    background: var(--gradient-rgb);
     transform: scaleX(0);
     transform-origin: center;
-    transition: transform 0.2s ease;
+    transition: transform 180ms ease;
+}
+
+.nav-link:hover,
+.profile-nav-link:hover,
+.nav-login:hover {
+    color: var(--color-primary-hover);
 }
 
 .nav-link:hover::after {
     transform: scaleX(1);
 }
 
-/* ---------------------------------------------------------
-   CATEGORIES DROPDOWN
---------------------------------------------------------- */
-
-.categories-dropdown {
-    position: relative;
-    height: 72px;
-    display: flex;
-    align-items: center;
-}
-
-/* ---------------------------------------------------------
-   CATEGORIES TRIGGER
---------------------------------------------------------- */
-
-.categories-trigger {
-    height: 72px;
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    padding: 0;
-    border: none;
-    background: transparent;
-    color: var(--text-secondary);
-    font-family: inherit;
-    font-size: 0.9375rem;
-    font-weight: 600;
-    cursor: pointer;
-    white-space: nowrap;
-    list-style: none;
-    transition: color 0.2s ease;
-}
-
-/* Remove native details arrow */
-
-.categories-trigger::-webkit-details-marker {
-    display: none;
-}
-
-.categories-trigger::marker {
-    display: none;
-}
-
-.categories-trigger:hover {
-    color: var(--primary-color);
-}
-
-/* ---------------------------------------------------------
-   CATEGORY ARROW
---------------------------------------------------------- */
-
-.categories-arrow {
-    font-size: 0.65rem;
-    transition: transform 0.2s ease;
-}
-
-.categories-dropdown[open] .categories-arrow {
-    transform: rotate(180deg);
-}
-
-/* ---------------------------------------------------------
-   CATEGORY MENU
---------------------------------------------------------- */
-
-.categories-menu {
-    position: absolute;
-    top: calc(100% + 8px);
-    left: 50%;
-    min-width: 210px;
-    max-width: 280px;
-    padding: 8px;
-    background: #ffffff;
-    border: 1px solid var(--border-color);
-    border-radius: 10px;
-    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
-    transform: translateX(-50%) translateY(-8px);
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    transition:
-        opacity 0.2s ease,
-        transform 0.2s ease,
-        visibility 0.2s ease;
-    z-index: 1100;
-}
-
-/* ---------------------------------------------------------
-   OPEN CATEGORY MENU
---------------------------------------------------------- */
-
-.categories-dropdown[open] .categories-menu {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-    transform: translateX(-50%) translateY(0);
-}
-
-/* ---------------------------------------------------------
-   CATEGORY LINKS
---------------------------------------------------------- */
-
-.category-link {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    padding: 10px 12px;
-    border-radius: 7px;
-    color: var(--text-secondary);
-    font-size: 0.875rem;
-    font-weight: 500;
-    text-decoration: none;
-    transition:
-        background 0.18s ease,
-        color 0.18s ease,
-        transform 0.18s ease;
-}
-
-.category-link:hover {
-    background: #eff6ff;
-    color: var(--primary-color);
-    transform: translateX(2px);
-}
-
-/* ---------------------------------------------------------
-   NO CATEGORIES
---------------------------------------------------------- */
-
-.no-categories {
-    display: block;
-    padding: 12px;
-    color: var(--text-secondary);
-    font-size: 0.875rem;
-    text-align: center;
-}
-
-/* ---------------------------------------------------------
-   CART
---------------------------------------------------------- */
-
-.cart-link {
-    gap: 6px;
-}
-
-.cart-icon {
-    font-size: 0.95rem;
-    line-height: 1;
-}
-
-/* ---------------------------------------------------------
-   CART COUNT
---------------------------------------------------------- */
-
-.cart-count {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 20px;
-    height: 20px;
-    padding: 0 5px;
-    margin-left: 1px;
-    border-radius: 999px;
-    background: var(--primary-color);
-    color: #ffffff;
-    font-size: 0.7rem;
-    font-weight: 700;
-    line-height: 1;
-    transform: translateY(-7px);
-}
-
-/* ---------------------------------------------------------
-   PROFILE NAVIGATION
---------------------------------------------------------- */
-
 .profile-nav-link {
-    display: inline-flex !important;
-    align-items: center;
-    gap: 8px;
-    height: 72px;
-    color: var(--text-primary) !important;
-    font-size: 0.875rem !important;
-    font-weight: 600 !important;
-    text-decoration: none;
-    white-space: nowrap;
-}
-
-.profile-nav-link:hover {
-    color: var(--primary-color) !important;
+    gap: 0.5rem;
+    color: var(--color-text);
 }
 
 .profile-nav-link::after {
-    display: none !important;
+    display: none;
 }
-
-/* ---------------------------------------------------------
-   PROFILE AVATAR
---------------------------------------------------------- */
 
 .profile-nav-avatar {
     width: 30px;
     height: 30px;
-    display: flex;
+    flex: 0 0 30px;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    border: 1px solid rgba(45, 226, 255, 0.45);
     border-radius: 50%;
-    background: #eff6ff;
-    color: #2563eb;
-    font-size: 0.75rem;
-    font-weight: 800;
-    flex-shrink: 0;
+    color: var(--color-primary-contrast);
+    background: var(--gradient-rgb);
+    font-size: 0.72rem;
+    font-weight: 900;
 }
 
 .profile-nav-avatar img {
@@ -344,260 +122,185 @@
     object-fit: cover;
 }
 
-.profile-nav-name {
-    display: inline-block;
+.cart-link {
+    gap: 0.4rem;
 }
 
-/* ---------------------------------------------------------
-   LOGIN
---------------------------------------------------------- */
-
-.nav-login {
-    color: var(--text-secondary);
+.cart-icon {
+    font-size: 0.95rem;
+    line-height: 1;
 }
 
-/* ---------------------------------------------------------
-   REGISTER
---------------------------------------------------------- */
-
-.nav-register {
+.cart-count {
+    min-width: 19px;
+    height: 19px;
+    padding: 0 0.3rem;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    height: 38px;
-    padding: 0 17px;
-    border-radius: 7px;
-    background: var(--primary-color);
-    color: #ffffff !important;
-    font-size: 0.9375rem;
-    font-weight: 600;
-    text-decoration: none;
+    border: 1px solid rgba(45, 226, 255, 0.65);
+    border-radius: var(--radius-pill);
+    color: var(--color-primary-contrast);
+    background: var(--color-primary);
+    font-size: 0.65rem;
+    font-weight: 900;
+    line-height: 1;
+    transform: translateY(-7px);
+}
+
+.nav-register {
+    min-height: 38px;
+    padding: 0 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    color: var(--color-primary-contrast);
+    background: var(--gradient-rgb);
+    box-shadow: 0 6px 20px rgba(157, 117, 255, 0.15);
+    font-size: 0.84rem;
+    font-weight: 750;
     white-space: nowrap;
-    transition:
-        background 0.2s ease,
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
 }
 
 .nav-register:hover {
-    background: var(--primary-hover);
-    color: #ffffff !important;
+    color: var(--color-primary-contrast);
+    box-shadow: 0 8px 24px rgba(45, 226, 255, 0.2);
+    filter: brightness(1.08);
     transform: translateY(-1px);
-    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);
 }
-
-/* ---------------------------------------------------------
-   MOBILE MENU TOGGLE
---------------------------------------------------------- */
 
 .nav-toggle {
     position: absolute;
-    opacity: 0;
-    pointer-events: none;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
 }
 
 .nav-toggle-label {
     display: none;
-    width: 40px;
-    height: 40px;
+    width: 42px;
+    height: 42px;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     gap: 5px;
-    border-radius: 7px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    color: var(--color-text);
+    background: var(--color-surface);
     cursor: pointer;
-    transition: background 0.2s ease;
+    transition: border-color 180ms ease, background-color 180ms ease, box-shadow 180ms ease;
 }
 
-.nav-toggle-label:hover {
-    background: #eff6ff;
+.nav-toggle-label:hover,
+.nav-toggle:checked + .nav-toggle-label {
+    border-color: var(--color-primary);
+    background: var(--color-surface-hover);
+}
+
+.nav-toggle:focus-visible + .nav-toggle-label {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 3px;
+    box-shadow: var(--focus-ring);
 }
 
 .nav-toggle-label span {
-    display: block;
-    width: 21px;
+    width: 20px;
     height: 2px;
+    display: block;
     border-radius: 2px;
-    background: var(--text-primary);
-    transition:
-        transform 0.2s ease,
-        opacity 0.2s ease;
+    background: currentColor;
+    transition: transform 180ms ease, opacity 180ms ease;
 }
 
-/* ---------------------------------------------------------
-   MOBILE
---------------------------------------------------------- */
+.nav-toggle:checked + .nav-toggle-label span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
 
-@media (max-width: 768px) {
-    .site-header {
-        height: 64px;
-    }
+.nav-toggle:checked + .nav-toggle-label span:nth-child(2) {
+    opacity: 0;
+}
 
-    .nav-container {
-        min-height: 64px;
-        height: auto;
-        padding: 0 20px;
-        position: relative;
-    }
+.nav-toggle:checked + .nav-toggle-label span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
 
-    .logo {
-        font-size: 1.4rem;
-    }
-
-    /* Mobile menu button */
+@media (max-width: 1080px) {
     .nav-toggle-label {
         display: flex;
     }
 
-    /* Mobile navigation */
     .nav-links {
         position: absolute;
-        top: 64px;
-        left: 0;
+        top: var(--header-height);
         right: 0;
+        left: 0;
         width: 100%;
-        padding: 14px 20px 18px;
+        max-height: calc(100vh - var(--header-height));
+        overflow-y: auto;
+        padding: 0.75rem var(--container-padding) 1rem;
         display: flex;
-        flex-direction: column;
         align-items: stretch;
-        gap: 0;
-        background: #ffffff;
-        border-bottom: 1px solid var(--border-color);
-        box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+        flex-direction: column;
+        justify-content: flex-start;
+        gap: 0.15rem;
+        border-bottom: 1px solid var(--color-border-strong);
+        background: rgba(7, 11, 25, 0.98);
+        box-shadow: var(--shadow-md);
         opacity: 0;
         visibility: hidden;
-        transform: translateY(-8px);
         pointer-events: none;
-        transition:
-            opacity 0.2s ease,
-            transform 0.2s ease,
-            visibility 0.2s ease;
-        z-index: 1050;
-    }
-
-    /* Open mobile menu */
-    .nav-toggle:checked ~ .nav-toggle-label {
-        background: #eff6ff;
-    }
-
-    .nav-toggle:checked ~ .nav-toggle-label span:nth-child(1) {
-        transform: translateY(7px) rotate(45deg);
-    }
-
-    .nav-toggle:checked ~ .nav-toggle-label span:nth-child(2) {
-        opacity: 0;
-    }
-
-    .nav-toggle:checked ~ .nav-toggle-label span:nth-child(3) {
-        transform: translateY(-7px) rotate(-45deg);
+        transform: translateY(-0.5rem);
+        transition: opacity 180ms ease, transform 180ms ease, visibility 180ms ease;
     }
 
     .nav-toggle:checked ~ .nav-links {
         opacity: 1;
         visibility: visible;
-        transform: translateY(0);
         pointer-events: auto;
+        transform: translateY(0);
     }
 
-    /* Mobile links */
-    .nav-link {
+    .nav-link,
+    .profile-nav-link {
         width: 100%;
         height: auto;
         min-height: 44px;
-        padding: 10px 4px;
-        border-bottom: 1px solid #f1f5f9;
+        padding: 0.7rem 0.25rem;
+        border-bottom: 1px solid rgba(29, 42, 69, 0.7);
     }
 
     .nav-link::after {
         display: none;
     }
 
-    /* Mobile Categories */
-    .categories-dropdown {
-        width: 100%;
-        height: auto;
-        display: block;
-        border-bottom: 1px solid #f1f5f9;
-    }
-
-    .categories-trigger {
-        width: 100%;
-        height: 44px;
-        padding: 10px 4px;
-        justify-content: space-between;
-    }
-
-    .categories-menu {
-        position: static;
-        width: 100%;
-        min-width: 0;
-        max-width: none;
-        padding: 0 0 8px;
-        background: #f8fafc;
-        border: none;
-        border-radius: 7px;
-        box-shadow: none;
-        transform: none;
-        opacity: 1;
-        visibility: visible;
-        pointer-events: auto;
-        display: none;
-    }
-
-    .categories-dropdown[open] .categories-menu {
-        display: block;
-        transform: none;
-    }
-
-    .category-link {
-        padding: 9px 14px;
-        font-size: 0.875rem;
-    }
-
-    .category-link:hover {
-        transform: none;
-    }
-
-    /* Mobile Cart */
-    .cart-link {
-        gap: 7px;
-    }
-
-    /* Mobile Profile */
-    .profile-nav-link {
-        width: 100%;
-        height: auto;
-        min-height: 44px;
-        padding: 7px 4px;
-    }
-
-    .profile-nav-name {
-        font-size: 0.875rem;
-    }
-
-    /* Mobile Register */
     .nav-register {
         width: 100%;
-        height: 40px;
-        margin-top: 10px;
+        margin-top: 0.55rem;
+    }
+
+    .profile-nav-link {
+        justify-content: flex-start;
     }
 }
 
-/* ---------------------------------------------------------
-   SMALL MOBILE
---------------------------------------------------------- */
-
 @media (max-width: 480px) {
     .nav-container {
-        padding: 0 15px;
-    }
-
-    .nav-links {
-        padding-left: 15px;
-        padding-right: 15px;
+        padding-right: 0.85rem;
+        padding-left: 0.85rem;
     }
 
     .logo {
         font-size: 1.3rem;
+    }
+
+    .nav-links {
+        padding-right: 0.85rem;
+        padding-left: 0.85rem;
     }
 }

@@ -1,6 +1,5 @@
 @import url("payments.css");
 
-/* Failed payment page entrypoint. */
 .payment-failed-page {
     width: 100%;
 }
